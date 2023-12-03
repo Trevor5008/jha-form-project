@@ -14,7 +14,8 @@ import SelectInput from "./SelectInput"
 import {
    projectData,
    companyNames,
-   supervisors
+   supervisors,
+   foreman
 } from "@/lib/options"
 
 export default function FrontPage() {
@@ -22,6 +23,9 @@ export default function FrontPage() {
    const [projectName, setProjectName] = useState("")
    const [shiftDateTime, setShiftDateTime] = useState("")
    const [companyName, setCompanyName] = useState("")
+   const [supervisorName, setSupervisorName] = useState("")
+   const [foremanName, setForemanName] = useState("")
+   const [taskDescription, setTaskDescription] = useState("")
 
    function handleProjectChange(evt) {
       setProjectName(evt.target.value)
@@ -35,8 +39,34 @@ export default function FrontPage() {
       setCompanyName(evt.target.value)
    }
 
-   function handleClick() {
-      console.log(companyName)
+   function handleSupervisorChange(evt) {
+      setSupervisorName(evt.target.value)
+   }
+
+   function handleForemanChange(evt) {
+      setForemanName(evt.target.value)
+   }
+
+   function handleTaskDescriptionChange(evt) {
+      setTaskDescription(evt.target.value)
+   }
+ 
+   async function handleClick() {
+      const obj = {
+         projectName,
+         shiftDateTime,
+         companyName,
+         supervisorName,
+         foremanName,
+         taskDescription
+      }
+      await fetch('../api/add-project', {
+         method: 'POST',
+         headers: {
+            "Content-Type": "application/json"
+         },
+         body: JSON.stringify({ obj })
+      })
    }
    return (
       <section>
@@ -169,6 +199,7 @@ export default function FrontPage() {
                <SelectInput
                   name="Supervisor"
                   data={supervisors}
+                  handleChange={handleSupervisorChange}
                />
             </FormControl>
             {/* Foreman */}
@@ -189,7 +220,8 @@ export default function FrontPage() {
             >
                <SelectInput
                   name="Foreman"
-                  data={supervisors}
+                  data={foreman}
+                  handleChange={handleForemanChange}
                />
             </FormControl>
          </Container>
@@ -202,8 +234,8 @@ export default function FrontPage() {
                   multiline
                   rows={4}
                   required
+                  onChange={handleTaskDescriptionChange}
                />
-               {/* <FormHelperText>Describe work to be performed</FormHelperText> */}
             </FormControl>
          </Container>
          <Box
