@@ -19,13 +19,21 @@ import {
 } from "@/lib/options"
 
 export default function FrontPage() {
-
-   const [projectName, setProjectName] = useState("")
-   const [shiftDateTime, setShiftDateTime] = useState("")
-   const [companyName, setCompanyName] = useState("")
-   const [supervisorName, setSupervisorName] = useState("")
-   const [foremanName, setForemanName] = useState("")
-   const [taskDescription, setTaskDescription] = useState("")
+   const [projectName, setProjectName] =
+      useState("")
+   const [shiftDateTime, setShiftDateTime] =
+      useState("")
+   const [companyName, setCompanyName] =
+      useState("")
+   const [supervisorName, setSupervisorName] =
+      useState("")
+   const [foremanName, setForemanName] =
+      useState("")
+   const [taskDescription, setTaskDescription] =
+      useState("")
+   const [shift, setShift] = useState(null)
+   const [dataReady, setDataReady] =
+      useState(false)
 
    function handleProjectChange(evt) {
       setProjectName(evt.target.value)
@@ -45,12 +53,13 @@ export default function FrontPage() {
 
    function handleForemanChange(evt) {
       setForemanName(evt.target.value)
+      console.log(dataReady)
    }
 
    function handleTaskDescriptionChange(evt) {
       setTaskDescription(evt.target.value)
    }
- 
+
    async function handleClick() {
       const obj = {
          projectName,
@@ -60,13 +69,16 @@ export default function FrontPage() {
          foremanName,
          taskDescription
       }
-      await fetch('../api/add-project', {
-         method: 'POST',
+      await fetch("../api/add-project", {
+         method: "POST",
          headers: {
             "Content-Type": "application/json"
          },
          body: JSON.stringify({ obj })
       })
+         .then((res) => res.json())
+         .then((res) => setShift(res.shift))
+         .then(() => setDataReady(true))
    }
    return (
       <section>
@@ -125,7 +137,9 @@ export default function FrontPage() {
                <SelectInput
                   name="Project Name and Number"
                   data={projectData}
-                  handleChange={handleProjectChange}
+                  handleChange={
+                     handleProjectChange
+                  }
                />
             </FormControl>
             {/* DateTime Input */}
@@ -144,7 +158,12 @@ export default function FrontPage() {
                }}
                required
             >
-               <DateTimeInput required handleShiftChange={handleShiftChange}/>
+               <DateTimeInput
+                  required
+                  handleShiftChange={
+                     handleShiftChange
+                  }
+               />
             </FormControl>
          </Container>
          {/* 2nd Row | Company Name, Supervisor */}
@@ -177,7 +196,9 @@ export default function FrontPage() {
                <SelectInput
                   name="Company Name"
                   data={companyNames}
-                  handleChange={handleCompanyChange}
+                  handleChange={
+                     handleCompanyChange
+                  }
                />
             </FormControl>
             {/* Supervisor */}
@@ -199,7 +220,9 @@ export default function FrontPage() {
                <SelectInput
                   name="Supervisor"
                   data={supervisors}
-                  handleChange={handleSupervisorChange}
+                  handleChange={
+                     handleSupervisorChange
+                  }
                />
             </FormControl>
             {/* Foreman */}
@@ -221,7 +244,9 @@ export default function FrontPage() {
                <SelectInput
                   name="Foreman"
                   data={foreman}
-                  handleChange={handleForemanChange}
+                  handleChange={
+                     handleForemanChange
+                  }
                />
             </FormControl>
          </Container>
@@ -234,7 +259,9 @@ export default function FrontPage() {
                   multiline
                   rows={4}
                   required
-                  onChange={handleTaskDescriptionChange}
+                  onChange={
+                     handleTaskDescriptionChange
+                  }
                />
             </FormControl>
          </Container>
@@ -242,9 +269,25 @@ export default function FrontPage() {
             display="flex"
             justifyContent="center"
          >
-            <Button variant="standard">
-               <Link href="#" onClick={handleClick}>Next</Link>
-            </Button>
+            {dataReady ? (
+               <Button variant="standard">
+                  <Link
+                     href={{
+                        pathname: "../page-two",
+                        query: { id: shift.id }
+                     }}
+                  >
+                     Next
+                  </Link>
+               </Button>
+            ) : (
+               <Button
+                  variant="standard"
+                  onClick={handleClick}
+               >
+                  Save
+               </Button>
+            )}
          </Box>
       </section>
    )

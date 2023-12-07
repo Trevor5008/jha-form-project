@@ -9,19 +9,26 @@ export async function POST(request) {
       shiftDateTime,
       taskDescription
    } = payload.obj
-   console.log(projectName)
-   await prisma.project.create({
+
+   const project = await prisma.project.create({
       data: {
          name: projectName,
          Shifts: {
             create: [
                {
                   startDateTime: shiftDateTime,
-                  endDateTime: null,
+                  endDateTime: shiftDateTime,
                   description: taskDescription
                }
             ]
          }
       }
    })
+   const shift = await prisma.shift.findFirst({
+    where: {
+        projectId: project.id,
+        startDateTime: shiftDateTime
+    }
+   })
+   return NextResponse.json({ shift })
 }
