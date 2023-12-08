@@ -26,6 +26,30 @@ model Shift {
   permits           Permit[]
   project           Project       @relation(fields: [projectId], references: [id])
   projectId         Int
+  shiftCategories   ShiftCategory[]
+}
+
+model Category {
+  id                Int           @id @default(autoincrement())
+  name              String    
+  CategoryOptions   CategoryOption[]  
+  shiftCategories   ShiftCategory[]
+}
+
+model CategoryOption {
+  id                Int           @id @default(autoincrement())
+  name              String
+  categoryId        Int
+  category          Category  @relation(fields: [categoryId], references: [id])
+}
+
+model ShiftCategory {
+  shift             Shift       @relation(fields: [shiftId], references: [id])
+  shiftId           Int
+  category          Category    @relation(fields: [categoryId], references: [id])
+  categoryId        Int
+
+  @@id([shiftId, categoryId])
 }
 
 model Permit {
