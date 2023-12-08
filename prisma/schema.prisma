@@ -26,14 +26,14 @@ model Shift {
   permits           Permit[]
   project           Project       @relation(fields: [projectId], references: [id])
   projectId         Int
-  shiftCategories   ShiftCategory[]
+  shiftCategoryOptions   ShiftCategoryOption[]
 }
 
 model Category {
   id                Int           @id @default(autoincrement())
   name              String    
-  CategoryOptions   CategoryOption[]  
-  shiftCategories   ShiftCategory[]
+  categoryOptions   CategoryOption[]  
+  shiftCategoryOptions ShiftCategoryOption[]
 }
 
 model CategoryOption {
@@ -41,15 +41,18 @@ model CategoryOption {
   name              String
   categoryId        Int
   category          Category  @relation(fields: [categoryId], references: [id])
+  shiftCategoryOptions   ShiftCategoryOption[]
 }
 
-model ShiftCategory {
-  shift             Shift       @relation(fields: [shiftId], references: [id])
+model ShiftCategoryOption {
   shiftId           Int
-  category          Category    @relation(fields: [categoryId], references: [id])
   categoryId        Int
+  categoryOptionId  Int
+  shift             Shift     @relation(fields: [shiftId], references: [id])
+  category          Category   @relation(fields: [categoryId], references: [id])
+  categoryOption    CategoryOption  @relation(fields: [categoryOptionId], references: [id])
 
-  @@id([shiftId, categoryId])
+  @@id([shiftId, categoryId, categoryOptionId])
 }
 
 model Permit {
