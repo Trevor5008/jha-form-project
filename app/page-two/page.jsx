@@ -19,9 +19,9 @@ import CheckIcon from "@mui/icons-material/Check"
 import CheckBoxOutlineBlankOutlinedIcon from "@mui/icons-material/CheckBoxOutlineBlankOutlined"
 
 export default function PageTwo() {
-   // const searchParams = useSearchParams()
+   const searchParams = useSearchParams()
    const [permits, setPermits] = useState(null)
-   const [atmosphericMonitoring, setAtmosphericMonitoring] = useState(null)
+   const [atmMonitoring, setAtmMonitoring] = useState(null)
    const [dataReady, setDataReady] = useState(false)
    // console.log(searchParams.get('id')) - gets shift id value
 
@@ -29,14 +29,29 @@ export default function PageTwo() {
       fetch("../api/get-page2-options")
          .then(res => res.json())
          .then(res => {
-            setPermits(res.permits)
-            setAtmosphericMonitoring(res.atmosphericMonitoring)
+            setPermits(res.permits.map(permit => ({
+               ...permit,
+               checked: false
+            })))
+            setAtmMonitoring(res.atmMonitoring.map(atm => ({
+               ...atm,
+               checked: false
+            })))
          })
          .then(() => setDataReady(true))
    }, [])
 
-   function handleChange(evt) {
-      console.log(evt.target.value)
+   function handlePermitChange(idx, isChecked) {
+      const val = isChecked === 'true'
+      setPermits(prev => {
+         const updatedOpts = [...prev]
+         updatedOpts[idx].checked = val
+         return updatedOpts
+      })
+   }
+
+   function handleNext() {
+      console.log(searchParams.get("id"))
    }
    return (
       <Container>
@@ -78,8 +93,8 @@ export default function PageTwo() {
                            <RadioGroup
                               aria-labelledby={`${opt.name} radio group`}
                               name={`${opt.name}`}
-                              onChange={handleChange}
-                              value={false}
+                              onChange={e => handlePermitChange(idx, e.target.value)}
+                              value={opt.checked}
                               sx={{
                                  display: "inline-block",
                                  marginLeft: 1
@@ -187,7 +202,7 @@ export default function PageTwo() {
                <Link href="/">Previous</Link>
             </Button>
             <Button variant="standard">
-               <Link href="/page-three">Next</Link>
+               <Link href="#" onClick={handleNext}>Next</Link>
             </Button>
          </Box>
       </Container>

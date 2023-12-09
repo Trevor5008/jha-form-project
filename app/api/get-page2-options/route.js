@@ -4,7 +4,7 @@ import { NextResponse } from "next/server"
 
 export async function GET(request) {
     // Permits
-   const permit = await prisma.category.findFirst({
+   const permit = await prisma["category"].findFirst({
     where: {
         name: "permits"
     },
@@ -22,10 +22,10 @@ export async function GET(request) {
     },
     select: { id: true }
    })
-   const atmosphericMonitoring = await prisma.categoryOption.findMany({
+   const atmMonitoring = await prisma.categoryOption.findMany({
     where: {
         categoryId: atmosphere.id
     }
    })
-   return NextResponse.json({ permits, atmosphericMonitoring })
+   return NextResponse.json({ permits, atmMonitoring })
 }
