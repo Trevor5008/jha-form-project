@@ -1,4 +1,5 @@
 "use client"
+import { useState, useEffect } from "react"
 import {
    Container,
    Typography,
@@ -14,14 +15,29 @@ import {
 } from "@mui/material"
 import Link from "next/link"
 import { useSearchParams } from 'next/navigation'
-import { permitOptions } from "@/lib/options"
 import CheckIcon from "@mui/icons-material/Check"
 import CheckBoxOutlineBlankOutlinedIcon from "@mui/icons-material/CheckBoxOutlineBlankOutlined"
 
-
 export default function PageTwo() {
-   const searchParams = useSearchParams()
+   // const searchParams = useSearchParams()
+   const [permits, setPermits] = useState(null)
+   const [atmosphericMonitoring, setAtmosphericMonitoring] = useState(null)
+   const [dataReady, setDataReady] = useState(false)
    // console.log(searchParams.get('id')) - gets shift id value
+
+   useEffect(() => {
+      fetch("../api/get-page2-options")
+         .then(res => res.json())
+         .then(res => {
+            setPermits(res.permits)
+            setAtmosphericMonitoring(res.atmosphericMonitoring)
+         })
+         .then(() => setDataReady(true))
+   }, [])
+
+   function handleChange(evt) {
+      console.log(evt.target.value)
+   }
    return (
       <Container>
          <Typography
@@ -37,7 +53,7 @@ export default function PageTwo() {
          >
             <Box
             >
-               {permitOptions
+               {dataReady ? permits
                   .map((opt, idx) => {
                      return (
                         <Box>
@@ -47,7 +63,7 @@ export default function PageTwo() {
                            sx={{ flexDirection: "row" }}
                         >
                               <FormLabel
-                                 id={`${opt} radio group`}
+                                 id={`${opt.name} radio group`}
                                  className="text-black"
                                  sx={{
                                     fontSize: {
@@ -57,18 +73,13 @@ export default function PageTwo() {
                                     width: "50%"
                                  }}
                               >
-                                 {opt}
+                                 {opt.name}
                               </FormLabel>
                            <RadioGroup
-                              aria-labelledby={`${opt} radio group`}
-                              name={`${opt}`}
-                              // onChange={handleChange}
-                              // section={section}
-                              // value={
-                              //    data && data.includes(opt)
-                              //       ? true
-                              //       : false
-                              // }
+                              aria-labelledby={`${opt.name} radio group`}
+                              name={`${opt.name}`}
+                              onChange={handleChange}
+                              value={false}
                               sx={{
                                  display: "inline-block",
                                  marginLeft: 1
@@ -147,7 +158,7 @@ export default function PageTwo() {
                         </FormControl>
                      </Box>
                      )
-                  })}
+                  }) : null}
             </Box>
                <TextField
                   label="Other"
