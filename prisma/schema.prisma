@@ -40,6 +40,7 @@ model CategoryOption {
   id                Int           @id @default(autoincrement())
   name              String
   categoryId        Int
+  checked           Boolean
   category          Category  @relation(fields: [categoryId], references: [id])
   shiftCategoryOptions   ShiftCategoryOption[]
 }
