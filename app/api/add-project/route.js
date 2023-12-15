@@ -10,6 +10,8 @@ export async function POST(request) {
       taskDescription
    } = payload.obj
 
+   const categoryOptions = await prisma.categoryOption.findMany()
+
    const project = await prisma.project.create({
       data: {
          name: projectName,
@@ -18,17 +20,36 @@ export async function POST(request) {
                {
                   startDateTime: shiftDateTime,
                   endDateTime: shiftDateTime,
-                  description: taskDescription
+                  description: taskDescription,
                }
             ]
          }
       }
    })
+
    const shift = await prisma.shift.findFirst({
-    where: {
-        projectId: project.id,
-        startDateTime: shiftDateTime
-    }
+      where: {
+         projectId: project.id,
+         startDateTime: shiftDateTime
+      }
    })
+   
+   for (let catOption of categoryOptions) {
+      await prisma.shift.update({
+         where: { id: shift.id },
+         data: {
+            shiftCategoryOptions: {
+               create: [
+                  {
+                     categoryId: catOption.categoryId,
+                     categoryOptionId: catOption.id,
+                     checked: false
+                  }
+               ]
+            }
+         }
+      })
+   }
+
    return NextResponse.json({ shift })
 }

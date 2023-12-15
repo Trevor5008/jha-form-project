@@ -26,17 +26,12 @@ export default function PageTwo() {
    // console.log(searchParams.get('id')) - gets shift id value
 
    useEffect(() => {
-      fetch("../api/get-page2-options")
+      fetch("../api/get-page2-options/" + searchParams.get('id'))
          .then(res => res.json())
          .then(res => {
-            setPermits(res.permits.map(permit => ({
-               ...permit,
-               checked: false
-            })))
-            setAtmMonitoring(res.atmMonitoring.map(atm => ({
-               ...atm,
-               checked: false
-            })))
+            console.log(res.permitOpts)
+            setPermits(res.permitOpts)
+            setAtmMonitoring(res.atmMonitorOpts)
          })
          .then(() => setDataReady(true))
    }, [])
@@ -45,7 +40,7 @@ export default function PageTwo() {
       const val = isChecked === 'true'
       setPermits(prev => {
          const updatedOpts = [...prev]
-         updatedOpts[idx].checked = val
+         updatedOpts[idx].shiftCategoryOptions[0].checked = val
          return updatedOpts
       })
    }
@@ -94,7 +89,7 @@ export default function PageTwo() {
                               aria-labelledby={`${opt.name} radio group`}
                               name={`${opt.name}`}
                               onChange={e => handlePermitChange(idx, e.target.value)}
-                              value={opt.checked}
+                              value={opt.shiftCategoryOptions[0].checked}
                               sx={{
                                  display: "inline-block",
                                  marginLeft: 1
