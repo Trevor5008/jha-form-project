@@ -20,12 +20,12 @@ import CheckBoxOutlineBlankOutlinedIcon from "@mui/icons-material/CheckBoxOutlin
 
 export default function PageTwo() {
    const searchParams = useSearchParams()
+   const shiftId = searchParams.get('id')
    const [permits, setPermits] = useState(null)
    const [atmMonitoring, setAtmMonitoring] =
       useState(null)
    const [dataReady, setDataReady] =
       useState(false)
-   // console.log(searchParams.get('id')) - gets shift id value
 
    useEffect(() => {
       fetch(
@@ -430,7 +430,10 @@ export default function PageTwo() {
             </Button>
             <Button variant="standard">
                <Link
-                  href="#"
+                  href={{
+                     pathname: "../page-three",
+                     query: { id: shiftId }
+                  }}
                   onClick={handleNext}
                >
                   Next
