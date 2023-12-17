@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import {
    Typography,
    Container,
@@ -19,6 +19,9 @@ import {
 } from "@/lib/options"
 
 export default function FrontPage() {
+   const [projects, setProjects] = useState(null)
+   const [isNewShift, setIsNewShift] =
+      useState(false)
    const [projectName, setProjectName] =
       useState("")
    const [shiftDateTime, setShiftDateTime] =
@@ -34,6 +37,17 @@ export default function FrontPage() {
    const [shift, setShift] = useState(null)
    const [dataReady, setDataReady] =
       useState(false)
+
+   useEffect(() => {
+      loadProjects()
+   }, [])
+
+   async function loadProjects() {
+      fetch("../api/load-projects")
+         .then((res) => res.json())
+         .then((res) => setProjects(res))
+         .then(() => setDataReady(true))
+   }
 
    function handleProjectChange(evt) {
       setProjectName(evt.target.value)
@@ -60,6 +74,10 @@ export default function FrontPage() {
       setTaskDescription(evt.target.value)
    }
 
+   function toggleNewShift() {
+      setIsNewShift(!isNewShift)
+   }
+
    async function handleClick() {
       const obj = {
          projectName,
@@ -80,7 +98,8 @@ export default function FrontPage() {
          .then((res) => setShift(res.shift))
          .then(() => setDataReady(true))
    }
-   return (
+
+   return isNewShift ? (
       <section>
          {/* Title */}
          <Typography
@@ -265,21 +284,33 @@ export default function FrontPage() {
                />
             </FormControl>
          </Container>
+         {/* Navigation */}
          <Box
             display="flex"
             justifyContent="center"
          >
             {dataReady ? (
-               <Button variant="standard">
-                  <Link
-                     href={{
-                        pathname: "../page-two",
-                        query: { id: shift.id }
-                     }}
+               <Container>
+                  {" "}
+                  <Button
+                     onClick={toggleNewShift}
                   >
-                     Next
-                  </Link>
-               </Button>
+                     Home
+                  </Button>
+                  <Button variant="standard">
+                     <Link
+                        href={{
+                           pathname:
+                              "../page-two",
+                           query: {
+                              id: shift?.id
+                           }
+                        }}
+                     >
+                        Next
+                     </Link>
+                  </Button>
+               </Container>
             ) : (
                <Button
                   variant="standard"
@@ -290,5 +321,12 @@ export default function FrontPage() {
             )}
          </Box>
       </section>
-   )
+   ) : projects && dataReady ? (
+      <Container>
+         <h1>Projects</h1>
+         <Button onClick={toggleNewShift}>
+            New Shift
+         </Button>
+      </Container>
+   ) : null
 }
