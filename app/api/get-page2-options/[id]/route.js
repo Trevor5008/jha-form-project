@@ -12,12 +12,24 @@ export async function GET(request, { params }) {
     select: { id: true }
    })
 
+   // Permit Category Options (Ids)
+   const permits = await prisma.categoryOption.findMany({
+    where: {
+        categoryId: permitId
+    }
+   })
+
    // Atmospheric Monitoring
    const { id: atmMonitorId } = await prisma.category.findFirst({
     where: {
         name: "atmospheric monitoring"
     },
     select: { id: true }
+   })
+   const atmMonitoring = await prisma.categoryOption.findMany({
+    where: {
+        categoryId: atmMonitorId
+    }
    })
 
    const permitOpts = await prisma.categoryOption.findMany({
