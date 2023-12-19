@@ -3,27 +3,16 @@ import { useEffect, useState } from "react"
 import {
    Typography,
    Container,
-   TextField,
    Button,
-   Box
+   Box,
+   FormControl,
+   SelectInput
 } from "@mui/material"
 import Link from "next/link"
-import { FormControl } from "@mui/material"
-import DateTimeInput from "./DateTimeInput"
-import SelectInput from "./SelectInput"
-import {
-   projectData,
-   companyNames,
-   supervisors,
-   foreman
-} from "@/lib/options"
 
-export default function FrontPage() {
-   const [projects, setProjects] = useState(null)
-   const [isNewShift, setIsNewShift] =
+export default function PageOne() {
+   const [dataReady, setDataReady] =
       useState(false)
-   const [projectName, setProjectName] =
-      useState("")
    const [shiftDateTime, setShiftDateTime] =
       useState("")
    const [companyName, setCompanyName] =
@@ -34,21 +23,6 @@ export default function FrontPage() {
       useState("")
    const [taskDescription, setTaskDescription] =
       useState("")
-   const [shift, setShift] = useState(null)
-   const [dataReady, setDataReady] =
-      useState(false)
-
-   useEffect(() => {
-      loadProjects()
-   }, [])
-
-   async function loadProjects() {
-      fetch("../api/load-projects")
-         .then((res) => res.json())
-         .then((res) => setProjects(res))
-         .then(() => setDataReady(true))
-   }
-
    function handleProjectChange(evt) {
       setProjectName(evt.target.value)
    }
@@ -67,15 +41,10 @@ export default function FrontPage() {
 
    function handleForemanChange(evt) {
       setForemanName(evt.target.value)
-      console.log(dataReady)
    }
 
    function handleTaskDescriptionChange(evt) {
       setTaskDescription(evt.target.value)
-   }
-
-   function toggleNewShift() {
-      setIsNewShift(!isNewShift)
    }
 
    async function handleClick() {
@@ -99,7 +68,7 @@ export default function FrontPage() {
          .then(() => setDataReady(true))
    }
 
-   return isNewShift ? (
+   return (
       <section>
          {/* Title */}
          <Typography
@@ -321,12 +290,5 @@ export default function FrontPage() {
             )}
          </Box>
       </section>
-   ) : projects && dataReady ? (
-      <Container>
-         <h1>Projects</h1>
-         <Button onClick={toggleNewShift}>
-            New Shift
-         </Button>
-      </Container>
-   ) : null
+   )
 }

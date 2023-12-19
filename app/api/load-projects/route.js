@@ -9,6 +9,6 @@ export async function GET() {
             Shifts: []
         }
     })
-    console.log(projects[0].Shifts)
+    
     return NextResponse.json({ projects })
 }
