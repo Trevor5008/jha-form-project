@@ -27,6 +27,7 @@ model Shift {
   project           Project       @relation(fields: [projectId], references: [id])
   projectId         Int
   shiftCategoryOptions   ShiftCategoryOption[]
+  miscOptions      MiscOption[]
 }
 
 model Category {
@@ -34,6 +35,7 @@ model Category {
   name              String    
   categoryOptions   CategoryOption[]  
   shiftCategoryOptions ShiftCategoryOption[]
+  miscOptions           MiscOption[]
 }
 
 model CategoryOption {
@@ -54,6 +56,16 @@ model ShiftCategoryOption {
   categoryOption    CategoryOption  @relation(fields: [categoryOptionId], references: [id])
 
   @@id([shiftId, categoryId, categoryOptionId])
+}
+
+model MiscOption {
+  shiftId           Int
+  categoryId        Int
+  details           String
+  shift             Shift     @relation(fields: [shiftId], references: [id])
+  category          Category  @relation(fields: [categoryId], references: [id])
+
+  @@id([shiftId, categoryId])
 }
 
 model Permit {

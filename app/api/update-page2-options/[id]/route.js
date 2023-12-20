@@ -16,6 +16,19 @@ export async function PATCH(request, { params }) {
     },
     select: { id: true }
    })
+
+   const permitMisc = await prisma.miscOption.findMany({
+      where: {
+         shiftId,
+         categoryId: permitsId
+      }
+   })
+
+   if (!permitMisc.length) {
+      console.log('nada')
+   } else {
+      console.log(permitMisc)
+   }
       // Iterate over each option and update 'checked' value
    for (let permit of data.permits) {
       const { id: permitId } =
