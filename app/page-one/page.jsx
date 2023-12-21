@@ -6,13 +6,21 @@ import {
    Button,
    Box,
    FormControl,
-   SelectInput
+   TextField
 } from "@mui/material"
+import DateTimeInput from "../components/DateTimeInput"
+import SelectInput from "../components/SelectInput"
+import {
+   companyNames,
+   supervisors,
+   foremen
+} from "../../lib/options"
 import Link from "next/link"
 
 export default function PageOne() {
    const [dataReady, setDataReady] =
       useState(false)
+   const [projects, setProjects] = useState(null)
    const [shiftDateTime, setShiftDateTime] =
       useState("")
    const [companyName, setCompanyName] =
@@ -23,6 +31,15 @@ export default function PageOne() {
       useState("")
    const [taskDescription, setTaskDescription] =
       useState("")
+
+   useEffect(() => {
+      fetch("../api/load-projects")
+         .then((res) => res.json())
+         .then((res) => setProjects(res.projects.map(prj => prj.name)))
+   }, [])
+
+   console.log(projects)
+
    function handleProjectChange(evt) {
       setProjectName(evt.target.value)
    }
@@ -67,7 +84,6 @@ export default function PageOne() {
          .then((res) => setShift(res.shift))
          .then(() => setDataReady(true))
    }
-
    return (
       <section>
          {/* Title */}
@@ -124,7 +140,7 @@ export default function PageOne() {
             >
                <SelectInput
                   name="Project Name and Number"
-                  data={projectData}
+                  data={projects}
                   handleChange={
                      handleProjectChange
                   }
@@ -231,7 +247,7 @@ export default function PageOne() {
             >
                <SelectInput
                   name="Foreman"
-                  data={foreman}
+                  data={foremen}
                   handleChange={
                      handleForemanChange
                   }
