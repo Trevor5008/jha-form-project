@@ -22,6 +22,7 @@ export default function PageTwo() {
    const searchParams = useSearchParams()
    const shiftId = searchParams.get('id')
    const [permits, setPermits] = useState(null)
+   const [permitMisc, setPermitMisc] = useState(null)
    const [atmMonitoring, setAtmMonitoring] =
       useState(null)
    const [dataReady, setDataReady] =
@@ -35,6 +36,7 @@ export default function PageTwo() {
          .then((res) => res.json())
          .then((res) => {
             setPermits(res.permitOpts)
+            setPermitMisc(res.permitMisc?.details)
             setAtmMonitoring(res.atmMonitorOpts)
          })
          .then(() => setDataReady(true))
@@ -65,6 +67,9 @@ export default function PageTwo() {
       })
    }
 
+   function changePermitMisc(evt) {
+      setPermitMisc(evt.target.value)
+   }
    function handleNext() {
       {
          fetch(
@@ -78,6 +83,7 @@ export default function PageTwo() {
                },
                body: JSON.stringify({
                   permits,
+                  permitMisc,
                   atmMonitoring
                })
             }
@@ -242,8 +248,9 @@ export default function PageTwo() {
                </Box>
                <TextField
                   label="Other"
-                  variant="standard"
+                  // variant="standard"
                   fullWidth
+                  value={permitMisc || ""}
                   sx={{
                      "& .MuiFormLabel-root": {
                         color: "black",
@@ -256,6 +263,7 @@ export default function PageTwo() {
                   }}
                   helperText="
                   * specify above"
+                  onChange={changePermitMisc}
                />
             </Box>
          </Container>

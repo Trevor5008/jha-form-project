@@ -19,6 +19,13 @@ export async function GET(request, { params }) {
     }
    })
 
+   const permitMisc = await prisma.miscOption.findFirst({
+    where: {
+        shiftId,
+        categoryId: permitId
+    }
+   })
+
    // Atmospheric Monitoring
    const { id: atmMonitorId } = await prisma.category.findFirst({
     where: {
@@ -61,5 +68,5 @@ export async function GET(request, { params }) {
     }
    })
 
-   return NextResponse.json({ permitOpts, atmMonitorOpts })
+   return NextResponse.json({ permitOpts, permitMisc, atmMonitorOpts })
 }
