@@ -15,14 +15,15 @@ import {
    supervisors,
    foremen
 } from "../../lib/options"
+import { useSearchParams } from "next/navigation"
 import Link from "next/link"
 
 export default function PageOne() {
+   const searchParams = useSearchParams()
    const [dataReady, setDataReady] =
       useState(false)
-   const [projects, setProjects] = useState(null)
    const [shiftDateTime, setShiftDateTime] =
-      useState("")
+      useState(null)
    const [companyName, setCompanyName] =
       useState("")
    const [supervisorName, setSupervisorName] =
@@ -31,18 +32,22 @@ export default function PageOne() {
       useState("")
    const [taskDescription, setTaskDescription] =
       useState("")
+   const [shiftId, setShiftId] = useState(null)
 
-   useEffect(() => {
-      fetch("../api/load-projects")
-         .then((res) => res.json())
-         .then((res) => setProjects(res.projects.map(prj => prj.name)))
-   }, [])
-
-   console.log(projects)
-
-   function handleProjectChange(evt) {
-      setProjectName(evt.target.value)
-   }
+   // useEffect(() => {
+   //    fetch("../api/add-shift/" + searchParams.get("id"),
+   //    {
+   //       method: "POST",
+   //       headers: {
+   //          "Content-Type":
+   //             "application/json"
+   //       },
+   //       body: JSON.stringify({
+   //          shiftDateTime,
+   //          taskDescription
+   //       })
+   //    })
+   // }, [])
 
    function handleShiftChange(val) {
       setShiftDateTime(val.$d)
@@ -64,24 +69,16 @@ export default function PageOne() {
       setTaskDescription(evt.target.value)
    }
 
-   async function handleClick() {
-      const obj = {
-         projectName,
-         shiftDateTime,
-         companyName,
-         supervisorName,
-         foremanName,
-         taskDescription
-      }
-      await fetch("../api/add-project", {
+   async function handleShiftAdd() {
+      await fetch("../../api/add-shift/" + searchParams.get('id'), {
          method: "POST",
          headers: {
             "Content-Type": "application/json"
          },
-         body: JSON.stringify({ obj })
+         body: JSON.stringify({ shiftDateTime, taskDescription })
       })
          .then((res) => res.json())
-         .then((res) => setShift(res.shift))
+         .then((res) => setShiftId(res.shiftId))
          .then(() => setDataReady(true))
    }
    return (
@@ -111,7 +108,7 @@ export default function PageOne() {
             expires, it must be returned to the
             PSC/PSA for record purposes
          </Typography>
-         {/* 1st Row | Project Name, Shift Date/Time */}
+         {/* 1st Row | Shift Date/Time */}
          <Container
             className="p-0 mt-5"
             sx={{
@@ -122,30 +119,6 @@ export default function PageOne() {
                }
             }}
          >
-            {/* Project Name Input */}
-            <FormControl
-               sx={{
-                  marginRight: {
-                     sm: ".5rem"
-                  },
-                  width: {
-                     xs: "100%",
-                     sm: "50%"
-                  },
-                  marginBottom: {
-                     xs: ".75rem"
-                  }
-               }}
-               required
-            >
-               <SelectInput
-                  name="Project Name and Number"
-                  data={projects}
-                  handleChange={
-                     handleProjectChange
-                  }
-               />
-            </FormControl>
             {/* DateTime Input */}
             <FormControl
                sx={{
@@ -274,21 +247,16 @@ export default function PageOne() {
             display="flex"
             justifyContent="center"
          >
-            {dataReady ? (
+            {dataReady && shiftId ? (
                <Container>
                   {" "}
-                  <Button
-                     onClick={toggleNewShift}
-                  >
-                     Home
-                  </Button>
                   <Button variant="standard">
                      <Link
                         href={{
                            pathname:
                               "../page-two",
                            query: {
-                              id: shift?.id
+                              id: shiftId
                            }
                         }}
                      >
@@ -299,7 +267,7 @@ export default function PageOne() {
             ) : (
                <Button
                   variant="standard"
-                  onClick={handleClick}
+                  onClick={handleShiftAdd}
                >
                   Save
                </Button>

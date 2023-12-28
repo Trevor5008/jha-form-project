@@ -34,8 +34,7 @@ async function main() {
             await prisma.categoryOption.create({
                 data: {
                     categoryId: cat.id,
-                    name: catOptions[i][j],
-                    checked: false
+                    name: catOptions[i][j]
                 }
             })
         }

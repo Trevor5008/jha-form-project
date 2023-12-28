@@ -21,7 +21,7 @@ export default function PageThree() {
    const shiftId = searchParams.get("id")
    const [situations, setSituations] =
       useState(null)
-   const [situationMisc, setSituationMisc] =
+   const [situationsMisc, setSituationsMisc] =
       useState(null)
    const [dataReady, setDataReady] =
       useState(false)
@@ -34,8 +34,8 @@ export default function PageThree() {
          .then((res) => res.json())
          .then((res) => {
             setSituations(res.situationOpts)
-            setSituationMisc(
-               res.situationMisc?.details
+            setSituationsMisc(
+               res.situationsMisc?.details
             )
          })
          .then(() => setDataReady(true))
@@ -56,28 +56,29 @@ export default function PageThree() {
    }
 
    function changeSituationMisc(evt) {
-      setSituationMisc(evt.target.value)
+      setSituationsMisc(evt.target.value)
    }
-   // function handleNext() {
-   //    {
-   //       fetch(
-   //          "../api/update-page2-options/" +
-   //             searchParams.get("id"),
-   //          {
-   //             method: "PATCH",
-   //             headers: {
-   //                "Content-Type":
-   //                   "application/json"
-   //             },
-   //             body: JSON.stringify({
-   //                permits,
-   //                permitMisc,
-   //                atmMonitoring
-   //             })
-   //          }
-   //       )
-   //    }
-   // }
+   function handleNext() {
+      console.log(situations)
+      {
+         fetch(
+            "../api/update-page3-options/" +
+               searchParams.get("id"),
+            {
+               method: "PATCH",
+               headers: {
+                  "Content-Type":
+                     "application/json"
+               },
+               body: JSON.stringify({
+                  situations,
+                  situationsMisc
+               })
+            }
+         )
+      }
+   }
+
    return (
       <Container>
          <Box marginBottom={2}>
@@ -285,17 +286,15 @@ export default function PageThree() {
                      pathname: "../page-two",
                      query: { id: shiftId }
                   }}
+                  onClick={handleNext}
                >
                   Previous
                </Link>
             </Button>
             <Button variant="standard">
                <Link
-                  href={{
-                     pathname: "#",
-                     query: { id: shiftId }
-                  }}
-                  // onClick={handleNext}
+                  href="#"
+                  onClick={handleNext}
                >
                   Next
                </Link>

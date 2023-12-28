@@ -434,9 +434,6 @@ export default function PageTwo() {
             justifyContent="space-evenly"
          >
             <Button variant="standard">
-               <Link href="/">Previous</Link>
-            </Button>
-            <Button variant="standard">
                <Link
                   href={{
                      pathname: "../page-three",

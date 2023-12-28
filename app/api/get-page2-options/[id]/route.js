@@ -57,6 +57,6 @@ export async function GET(request, { params }) {
         }
     }
    })
-
+   console.log(permitOpts)
    return NextResponse.json({ permitOpts, permitMisc, atmMonitorOpts })
 }

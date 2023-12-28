@@ -1,6 +1,5 @@
 const prisma = new PrismaClient()
 import { PrismaClient } from "@prisma/client"
-import { NextResponse } from "next/server"
 
 export async function PATCH(request, { params }) {
    const rawBody = await request.text()

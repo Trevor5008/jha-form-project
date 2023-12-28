@@ -1,6 +1,6 @@
-// const prisma = new PrismaClient()
-// import { PrismaClient } from "@prisma/client"
-// import { NextResponse } from "next/server"
+const prisma = new PrismaClient()
+import { PrismaClient } from "@prisma/client"
+import { NextResponse } from "next/server"
 
 // export async function GET(request) {
 //    const payload = await request.json()

@@ -32,6 +32,7 @@ export default function HomePage() {
 
    useEffect(() => {
       loadProjects()
+      console.log("loaded")
    }, [])
 
    async function loadProjects() {
@@ -45,44 +46,63 @@ export default function HomePage() {
       console.log(shift)
    }
 
+   console.log(projects)
+
    return dataReady ? (
       <Container>
          <h1>Projects</h1>
          {projects.map((opt, idx) => {
             return (
                <Container>
-                  <ul>{opt.name}
+                  <ul>
+                     {opt.name}
                      {opt.Shifts.map((shift) => {
                         return (
                            <li>
                               <Link
                                  style={{
-                                    textDecoration: "none"
+                                    textDecoration:
+                                       "none"
                                  }}
                                  sx={{
-                                    cursor: "pointer"
+                                    cursor:
+                                       "pointer"
                                  }}
                                  href={{
-                                    pathname: "../page-two",
+                                    pathname:
+                                       "../page-two",
                                     query: {
                                        id: shift.id
                                     }
                                  }}
                               >
-                                 {shift.description}
+                                 {
+                                    shift.description
+                                 }
                               </Link>
                            </li>
                         )
                      })}
                   </ul>
+                  <Button>
+                     <Link
+                        href={{
+                           pathname: "../page-one",
+                           query: {
+                              id: opt.id
+                           }
+                        }}
+                        style={{
+                           textDecoration: "none",
+                           cursor: "pointer"
+                        }}
+                     >
+                        New Shift
+                     </Link>
+                  </Button>
                </Container>
             )
          })}
-         <Button>
-            <Link href="../page-one" style={{ textDecoration: 'none'  }}>
-               New Shift
-            </Link>
-         </Button>
       </Container>
    ) : null
 }

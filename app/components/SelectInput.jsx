@@ -21,7 +21,7 @@ import {
              label={name}
               onChange={handleChange}
           >
-             {data.map((opt, idx) => {
+             {data?.map((opt, idx) => {
                 return (
                    <MenuItem
                       key={`${opt}-${idx}`}
