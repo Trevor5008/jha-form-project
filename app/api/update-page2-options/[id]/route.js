@@ -5,6 +5,7 @@ export async function PATCH(request, { params }) {
    const rawBody = await request.text()
    const data = JSON.parse(rawBody)
    const shiftId = Number(params.id)
+   console.log(data)
 
    // Permits
    // get permit category id
@@ -24,7 +25,7 @@ export async function PATCH(request, { params }) {
          }
       })
 
-   if (!permitMisc) {
+   if (!permitMisc && data.permitMisc) {
       await prisma.miscOption.create({
          data: {
             shiftId,
@@ -32,7 +33,7 @@ export async function PATCH(request, { params }) {
             details: data.permitMisc
          }
       })
-   } else {
+   } else if (data.permitMisc) {
       await prisma.miscOption.update({
          where: {
             shiftId_categoryId: {
