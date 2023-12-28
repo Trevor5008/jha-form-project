@@ -98,7 +98,7 @@ export default function PageTwo() {
                variant="h3"
                marginBottom={1}
             >
-               <span className="font-bold">
+               <span>
                   A.
                </span>{" "}
                Are Permits Required? Are they
@@ -274,7 +274,7 @@ export default function PageTwo() {
                variant="h3"
                marginBottom={1}
             >
-               <span className="font-bold">
+               <span style={{ fontWeight: "bold"}}>
                   B.
                </span>{" "}
                Atmospheric Monitoring

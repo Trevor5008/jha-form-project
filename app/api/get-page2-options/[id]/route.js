@@ -13,12 +13,6 @@ export async function GET(request, { params }) {
    })
 
    // Permit Category Options (Ids)
-   const permits = await prisma.categoryOption.findMany({
-    where: {
-        categoryId: permitId
-    }
-   })
-
    const permitMisc = await prisma.miscOption.findFirst({
     where: {
         shiftId,
@@ -32,11 +26,6 @@ export async function GET(request, { params }) {
         name: "atmospheric monitoring"
     },
     select: { id: true }
-   })
-   const atmMonitoring = await prisma.categoryOption.findMany({
-    where: {
-        categoryId: atmMonitorId
-    }
    })
 
    const permitOpts = await prisma.categoryOption.findMany({
@@ -53,6 +42,7 @@ export async function GET(request, { params }) {
         }
     },
    })
+
    const atmMonitorOpts = await prisma.categoryOption.findMany({
     where: {
         categoryId: atmMonitorId
