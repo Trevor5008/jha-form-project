@@ -55,7 +55,7 @@ export async function PATCH(request, { params }) {
                id: true
             }
          })
-         console.log(situationId)
+
       await prisma.shiftCategoryOption.update({
          where: {
             shiftId_categoryId_categoryOptionId: {
