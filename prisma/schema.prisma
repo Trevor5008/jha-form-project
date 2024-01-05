@@ -1,0 +1,76 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Project {
+  id                Int           @id @default(autoincrement())
+  name              String    
+  owner             String?  // pre-populated
+  location          String?  // pre-populated
+  Shifts            Shift[]
+}
+
+model Shift {
+  id                Int           @id @default(autoincrement())
+  startDateTime     DateTime      
+  endDateTime       DateTime?       
+  description       String
+  permits           Permit[]
+  project           Project       @relation(fields: [projectId], references: [id])
+  projectId         Int
+  shiftCategoryOptions   ShiftCategoryOption[]
+  miscOptions      MiscOption[]
+}
+
+model Category {
+  id                Int           @id @default(autoincrement())
+  name              String    
+  categoryOptions   CategoryOption[]  
+  shiftCategoryOptions ShiftCategoryOption[]
+  miscOptions           MiscOption[]
+}
+
+model CategoryOption {
+  id                Int           @id @default(autoincrement())
+  name              String
+  categoryId        Int
+  category          Category  @relation(fields: [categoryId], references: [id])
+  shiftCategoryOptions   ShiftCategoryOption[]
+}
+
+model ShiftCategoryOption {
+  shiftId           Int
+  categoryId        Int
+  categoryOptionId  Int
+  checked           Boolean
+  shift             Shift     @relation(fields: [shiftId], references: [id])
+  category          Category   @relation(fields: [categoryId], references: [id])
+  categoryOption    CategoryOption  @relation(fields: [categoryOptionId], references: [id])
+
+  @@id([shiftId, categoryId, categoryOptionId])
+}
+
+model MiscOption {
+  shiftId           Int
+  categoryId        Int
+  details           String
+  shift             Shift     @relation(fields: [shiftId], references: [id])
+  category          Category  @relation(fields: [categoryId], references: [id])
+
+  @@id([shiftId, categoryId])
+}
+
+model Permit {
+  id                Int           @id @default(autoincrement())
+  name              String
+  shift             Shift         @relation(fields: [shiftId], references: [id])
+  shiftId           Int
+}

@@ -1,31 +1,53 @@
 "use client"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import {
    Typography,
    Container,
-   TextField,
    Button,
-   Box
+   Box,
+   FormControl,
+   TextField
 } from "@mui/material"
-import Link from "next/link"
-import { FormControl } from "@mui/material"
-import DateTimeInput from "./DateTimeInput"
-import SelectInput from "./SelectInput"
+import DateTimeInput from "../components/DateTimeInput"
+import SelectInput from "../components/SelectInput"
 import {
-   projectData,
    companyNames,
-   supervisors
-} from "@/lib/options"
+   supervisors,
+   foremen
+} from "../../lib/options"
+import { useSearchParams } from "next/navigation"
+import Link from "next/link"
 
-export default function FrontPage() {
+export default function PageOne() {
+   const searchParams = useSearchParams()
+   const [dataReady, setDataReady] =
+      useState(false)
+   const [shiftDateTime, setShiftDateTime] =
+      useState(null)
+   const [companyName, setCompanyName] =
+      useState("")
+   const [supervisorName, setSupervisorName] =
+      useState("")
+   const [foremanName, setForemanName] =
+      useState("")
+   const [taskDescription, setTaskDescription] =
+      useState("")
+   const [shiftId, setShiftId] = useState(null)
 
-   const [projectName, setProjectName] = useState("")
-   const [shiftDateTime, setShiftDateTime] = useState("")
-   const [companyName, setCompanyName] = useState("")
-
-   function handleProjectChange(evt) {
-      setProjectName(evt.target.value)
-   }
+   // useEffect(() => {
+   //    fetch("../api/add-shift/" + searchParams.get("id"),
+   //    {
+   //       method: "POST",
+   //       headers: {
+   //          "Content-Type":
+   //             "application/json"
+   //       },
+   //       body: JSON.stringify({
+   //          shiftDateTime,
+   //          taskDescription
+   //       })
+   //    })
+   // }, [])
 
    function handleShiftChange(val) {
       setShiftDateTime(val.$d)
@@ -35,8 +57,29 @@ export default function FrontPage() {
       setCompanyName(evt.target.value)
    }
 
-   function handleClick() {
-      console.log(companyName)
+   function handleSupervisorChange(evt) {
+      setSupervisorName(evt.target.value)
+   }
+
+   function handleForemanChange(evt) {
+      setForemanName(evt.target.value)
+   }
+
+   function handleTaskDescriptionChange(evt) {
+      setTaskDescription(evt.target.value)
+   }
+
+   async function handleShiftAdd() {
+      await fetch("../../api/add-shift/" + searchParams.get('id'), {
+         method: "POST",
+         headers: {
+            "Content-Type": "application/json"
+         },
+         body: JSON.stringify({ shiftDateTime, taskDescription })
+      })
+         .then((res) => res.json())
+         .then((res) => setShiftId(res.shiftId))
+         .then(() => setDataReady(true))
    }
    return (
       <section>
@@ -65,7 +108,7 @@ export default function FrontPage() {
             expires, it must be returned to the
             PSC/PSA for record purposes
          </Typography>
-         {/* 1st Row | Project Name, Shift Date/Time */}
+         {/* 1st Row | Shift Date/Time */}
          <Container
             className="p-0 mt-5"
             sx={{
@@ -76,28 +119,6 @@ export default function FrontPage() {
                }
             }}
          >
-            {/* Project Name Input */}
-            <FormControl
-               sx={{
-                  marginRight: {
-                     sm: ".5rem"
-                  },
-                  width: {
-                     xs: "100%",
-                     sm: "50%"
-                  },
-                  marginBottom: {
-                     xs: ".75rem"
-                  }
-               }}
-               required
-            >
-               <SelectInput
-                  name="Project Name and Number"
-                  data={projectData}
-                  handleChange={handleProjectChange}
-               />
-            </FormControl>
             {/* DateTime Input */}
             <FormControl
                sx={{
@@ -114,7 +135,12 @@ export default function FrontPage() {
                }}
                required
             >
-               <DateTimeInput required handleShiftChange={handleShiftChange}/>
+               <DateTimeInput
+                  required
+                  handleShiftChange={
+                     handleShiftChange
+                  }
+               />
             </FormControl>
          </Container>
          {/* 2nd Row | Company Name, Supervisor */}
@@ -147,7 +173,9 @@ export default function FrontPage() {
                <SelectInput
                   name="Company Name"
                   data={companyNames}
-                  handleChange={handleCompanyChange}
+                  handleChange={
+                     handleCompanyChange
+                  }
                />
             </FormControl>
             {/* Supervisor */}
@@ -169,6 +197,9 @@ export default function FrontPage() {
                <SelectInput
                   name="Supervisor"
                   data={supervisors}
+                  handleChange={
+                     handleSupervisorChange
+                  }
                />
             </FormControl>
             {/* Foreman */}
@@ -189,7 +220,10 @@ export default function FrontPage() {
             >
                <SelectInput
                   name="Foreman"
-                  data={supervisors}
+                  data={foremen}
+                  handleChange={
+                     handleForemanChange
+                  }
                />
             </FormControl>
          </Container>
@@ -202,17 +236,42 @@ export default function FrontPage() {
                   multiline
                   rows={4}
                   required
+                  onChange={
+                     handleTaskDescriptionChange
+                  }
                />
-               {/* <FormHelperText>Describe work to be performed</FormHelperText> */}
             </FormControl>
          </Container>
+         {/* Navigation */}
          <Box
             display="flex"
             justifyContent="center"
          >
-            <Button variant="standard">
-               <Link href="#" onClick={handleClick}>Next</Link>
-            </Button>
+            {dataReady && shiftId ? (
+               <Container>
+                  {" "}
+                  <Button variant="standard">
+                     <Link
+                        href={{
+                           pathname:
+                              "../page-two",
+                           query: {
+                              id: shiftId
+                           }
+                        }}
+                     >
+                        Next
+                     </Link>
+                  </Button>
+               </Container>
+            ) : (
+               <Button
+                  variant="standard"
+                  onClick={handleShiftAdd}
+               >
+                  Save
+               </Button>
+            )}
          </Box>
       </section>
    )

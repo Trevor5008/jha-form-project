@@ -1,12 +1,12 @@
 import Header from "./components/Header"
 import Box from "@mui/material/Box"
-import FrontPage from "./components/FrontPage"
+import HomePage from "./components/HomePage"
 
 export default function Home() {
    return (
       <Box>
          <Header />
-         <FrontPage />
+         <HomePage />
       </Box>
    )
 }
