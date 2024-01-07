@@ -9,7 +9,8 @@ import {
    FormLabel,
    Radio,
    RadioGroup,
-   Typography
+   Typography,
+   InputAdornment
 } from "@mui/material"
 import CheckIcon from "@mui/icons-material/Check"
 import CheckBoxOutlineBlankOutlinedIcon from "@mui/icons-material/CheckBoxOutlineBlankOutlined"
@@ -35,18 +36,35 @@ export default function PageFour() {
          .then(() => setDataReady(true))
    }, [])
 
-   function handleHazardChange(
-    idx,
-    isChecked
- ) {
-    const val = isChecked === "true"
-    setHazards((prev) => {
-       const updatedOpts = [...prev]
-       updatedOpts[
-          idx
-       ].shiftCategoryOptions[0].checked = val
-       return updatedOpts
-    })
+   function handleHazardChange(idx, isChecked) {
+      const val = isChecked === "true"
+      setHazards((prev) => {
+         const updatedOpts = [...prev]
+         updatedOpts[
+            idx
+         ].shiftCategoryOptions[0].checked = val
+         return updatedOpts
+      })
+   }
+
+   function handleNext() {
+    {
+       fetch(
+          "../api/update-page4-options/" +
+             searchParams.get("id"),
+          {
+             method: "PATCH",
+             headers: {
+                "Content-Type":
+                   "application/json"
+             },
+             body: JSON.stringify({
+                hazards,
+                // situationsMisc
+             })
+          }
+       )
+    }
  }
    return (
       <Container>
@@ -221,7 +239,7 @@ export default function PageFour() {
                      pathname: "../page-three",
                      query: { id: shiftId }
                   }}
-                  //   onClick={handleNext}
+                  onClick={handleNext}
                >
                   Previous
                </Link>
@@ -229,10 +247,10 @@ export default function PageFour() {
             <Button variant="standard">
                <Link
                   href={{
-                     pathname: "../page-four",
+                     pathname: "../page-five",
                      query: { id: shiftId }
                   }}
-                  //   onClick={handleNext}
+                  onClick={handleNext}
                >
                   Next
                </Link>
