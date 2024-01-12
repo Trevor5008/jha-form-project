@@ -59,7 +59,6 @@ export default function PageThree() {
       setSituationsMisc(evt.target.value)
    }
    function handleNext() {
-      console.log(situations)
       {
          fetch(
             "../api/update-page3-options/" +
@@ -293,7 +292,10 @@ export default function PageThree() {
             </Button>
             <Button variant="standard">
                <Link
-                  href="#"
+                  href={{
+                     pathname: "../page-four",
+                     query: { id: shiftId }
+                  }}
                   onClick={handleNext}
                >
                   Next

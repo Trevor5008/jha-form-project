@@ -5,7 +5,6 @@ export async function PATCH(request, { params }) {
    const rawBody = await request.text()
    const data = JSON.parse(rawBody)
    const shiftId = Number(params.id)
-   console.log(data)
 
    // Permits
    // get permit category id
