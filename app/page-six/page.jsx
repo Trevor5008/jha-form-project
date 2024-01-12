@@ -19,15 +19,15 @@ import Link from "next/link"
 export default function PageFive() {
    const searchParams = useSearchParams()
    const shiftId = searchParams.get("id")
-   const [hazardControls, setHazardControls] = useState(null)
+   const [ppe, setPpe] = useState(null)
    const [dataReady, setDataReady] =
       useState(false)
 
    useEffect(() => {
-      fetch("../api/get-page5-options/" + shiftId)
+      fetch("../api/get-page6-options/" + shiftId)
          .then((res) => res.json())
          .then((res) => {
-            setHazardControls(res.hazardControlOpts)
+            setPpe(res.ppeOpts)
             //   setSituationsMisc(
             //      res.situationsMisc?.details
             //   )
@@ -35,9 +35,9 @@ export default function PageFive() {
          .then(() => setDataReady(true))
    }, [])
 
-   function handleHazardControlChange(idx, isChecked) {
+   function handlePpeChange(idx, isChecked) {
       const val = isChecked === "true"
-      setHazardControls((prev) => {
+      setPpe((prev) => {
          const updatedOpts = [...prev]
          updatedOpts[
             idx
@@ -49,7 +49,7 @@ export default function PageFive() {
    function handleNext() {
     {
        fetch(
-          "../api/update-page5-options/" +
+          "../api/update-page6-options/" +
              searchParams.get("id"),
           {
              method: "PATCH",
@@ -58,8 +58,7 @@ export default function PageFive() {
                    "application/json"
              },
              body: JSON.stringify({
-                hazardControls,
-                // situationsMisc
+                ppe,
              })
           }
        )
@@ -67,7 +66,7 @@ export default function PageFive() {
  }
    return (
       <Container>
-         {/* Hazards */}
+         {/* PPE */}
          <Container>
             {/* Heading */}
             <Typography
@@ -77,9 +76,9 @@ export default function PageFive() {
                <span
                   style={{ fontWeight: "bold" }}
                >
-                  C.3
+                  C.4
                </span>{" "}
-               Hazard Controls
+               Proper PPE
             </Typography>
             {/* Body */}
             <Box
@@ -92,7 +91,7 @@ export default function PageFive() {
                }}
             >
                {dataReady
-                  ? hazardControls.map((opt, idx) => {
+                  ? ppe.map((opt, idx) => {
                        return (
                           <Box display="flex">
                              <FormControl
@@ -122,7 +121,7 @@ export default function PageFive() {
                                    onChange={(
                                       e
                                    ) =>
-                                      handleHazardControlChange(
+                                      handlePpeChange(
                                          idx,
                                          e.target
                                             .value
@@ -235,7 +234,7 @@ export default function PageFive() {
             <Button variant="standard">
                <Link
                   href={{
-                     pathname: "../page-four",
+                     pathname: "../page-five",
                      query: { id: shiftId }
                   }}
                   onClick={handleNext}
@@ -246,7 +245,7 @@ export default function PageFive() {
             <Button variant="standard">
                <Link
                   href={{
-                     pathname: "../page-six",
+                     pathname: "#",
                      query: { id: shiftId }
                   }}
                   onClick={handleNext}
