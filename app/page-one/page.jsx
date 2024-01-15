@@ -34,21 +34,6 @@ export default function PageOne() {
       useState("")
    const [shiftId, setShiftId] = useState(null)
 
-   // useEffect(() => {
-   //    fetch("../api/add-shift/" + searchParams.get("id"),
-   //    {
-   //       method: "POST",
-   //       headers: {
-   //          "Content-Type":
-   //             "application/json"
-   //       },
-   //       body: JSON.stringify({
-   //          shiftDateTime,
-   //          taskDescription
-   //       })
-   //    })
-   // }, [])
-
    function handleShiftChange(val) {
       setShiftDateTime(val.$d)
    }
@@ -70,13 +55,20 @@ export default function PageOne() {
    }
 
    async function handleShiftAdd() {
-      await fetch("../../api/add-shift/" + searchParams.get('id'), {
-         method: "POST",
-         headers: {
-            "Content-Type": "application/json"
-         },
-         body: JSON.stringify({ shiftDateTime, taskDescription })
-      })
+      await fetch(
+         "../../api/add-shift/" +
+            searchParams.get("id"),
+         {
+            method: "POST",
+            headers: {
+               "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+               shiftDateTime,
+               taskDescription
+            })
+         }
+      )
          .then((res) => res.json())
          .then((res) => setShiftId(res.shiftId))
          .then(() => setDataReady(true))
@@ -247,6 +239,9 @@ export default function PageOne() {
             display="flex"
             justifyContent="center"
          >
+            <Button variant="standard">
+               <Link href="/">Home</Link>
+            </Button>
             {dataReady && shiftId ? (
                <Container>
                   {" "}

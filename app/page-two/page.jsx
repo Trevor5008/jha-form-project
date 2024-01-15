@@ -20,9 +20,10 @@ import CheckBoxOutlineBlankOutlinedIcon from "@mui/icons-material/CheckBoxOutlin
 
 export default function PageTwo() {
    const searchParams = useSearchParams()
-   const shiftId = searchParams.get('id')
+   const shiftId = searchParams.get("id")
    const [permits, setPermits] = useState(null)
-   const [permitMisc, setPermitMisc] = useState(null)
+   const [permitMisc, setPermitMisc] =
+      useState(null)
    const [atmMonitoring, setAtmMonitoring] =
       useState(null)
    const [dataReady, setDataReady] =
@@ -98,12 +99,9 @@ export default function PageTwo() {
                variant="h3"
                marginBottom={1}
             >
-               <span>
-                  A.
-               </span>{" "}
-               Are Permits Required? Are they
-               displayed and properly signed by
-               the PSC/PSA?
+               <span>A.</span> Are Permits
+               Required? Are they displayed and
+               properly signed by the PSC/PSA?
             </Typography>
             <Box>
                <Box>
@@ -274,7 +272,9 @@ export default function PageTwo() {
                variant="h3"
                marginBottom={1}
             >
-               <span style={{ fontWeight: "bold"}}>
+               <span
+                  style={{ fontWeight: "bold" }}
+               >
                   B.
                </span>{" "}
                Atmospheric Monitoring
@@ -433,6 +433,9 @@ export default function PageTwo() {
             display="flex"
             justifyContent="space-evenly"
          >
+            <Button variant="standard">
+               <Link href="/">Home</Link>
+            </Button>
             <Button variant="standard">
                <Link
                   href={{

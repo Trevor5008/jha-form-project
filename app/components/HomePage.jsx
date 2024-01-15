@@ -42,15 +42,9 @@ export default function HomePage() {
          .then(() => setDataReady(true))
    }
 
-   function logDescription(shift) {
-      console.log(shift)
-   }
-
-   console.log(projects)
-
    return dataReady ? (
       <Container>
-         <h1>Projects</h1>
+         <h1>Tasks</h1>
          {projects.map((opt, idx) => {
             return (
                <Container>
