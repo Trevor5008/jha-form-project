@@ -245,7 +245,7 @@ export default function PageFive() {
             <Button variant="standard">
                <Link
                   href={{
-                     pathname: "#",
+                     pathname: "../page-seven",
                      query: { id: shiftId }
                   }}
                   onClick={handleNext}
