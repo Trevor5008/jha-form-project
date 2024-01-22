@@ -93,7 +93,7 @@ export default function PageFive() {
                {dataReady
                   ? ppe.map((opt, idx) => {
                        return (
-                          <Box display="flex">
+                          <Box display="flex" key={opt.name}>
                              <FormControl
                                 className="mb-2 flex flex-nowrap items-center justify-between"
                                 fullWidth

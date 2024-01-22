@@ -8,11 +8,30 @@ export async function GET(request, { params }) {
    const { situationsId, hazardsId, hazardControlsId, ppeId } =
       await gatherCategoryIds();
 
-   const hazards = await getHazardOpts(shiftId, hazardControlsId)
+   const situations = await getSituationOps(shiftId, situationsId);
+   const hazards = await getHazardOpts(shiftId, hazardsId);
    const hazardControls = await getHazardControlOpts(shiftId, hazardControlsId);
+   const ppe = await getPpeOpts(shiftId, ppeId);
 
-   return NextResponse.json({ hazards, hazardControls})
+   return NextResponse.json({ situations, hazards, hazardControls, ppe });
 }
+
+const getSituationOps = async (shiftId, situationsId) => {
+   const situationOpts = await prisma.categoryOption.findMany({
+      where: { categoryId: situationsId },
+      include: {
+         shiftCategoryOptions: {
+            where: { shiftId, checked: true },
+         },
+      },
+   });
+
+   const situations = situationOpts.filter((control) => {
+      return control.shiftCategoryOptions.length > 0;
+   });
+
+   return situations;
+};
 
 const getHazardOpts = async (shiftId, hazardsId) => {
    const hazardOpts = await prisma.categoryOption.findMany({
@@ -24,9 +43,9 @@ const getHazardOpts = async (shiftId, hazardsId) => {
       },
    });
 
-   const hazards = hazardOpts.filter(control => {
-      return control.shiftCategoryOptions.length > 0
-   })
+   const hazards = hazardOpts.filter((control) => {
+      return control.shiftCategoryOptions.length > 0;
+   });
    return hazards;
 };
 
@@ -40,10 +59,26 @@ const getHazardControlOpts = async (shiftId, hazardControlsId) => {
       },
    });
 
-   const hazardControls = hazardControlOpts.filter(control => {
-      return control.shiftCategoryOptions.length > 0
-   })
+   const hazardControls = hazardControlOpts.filter((control) => {
+      return control.shiftCategoryOptions.length > 0;
+   });
    return hazardControls;
+};
+
+const getPpeOpts = async (shiftId, ppeId) => {
+   const ppeOpts = await prisma.categoryOption.findMany({
+      where: { categoryId: ppeId },
+      include: {
+         shiftCategoryOptions: {
+            where: { shiftId, checked: true },
+         },
+      },
+   });
+
+   const ppe = ppeOpts.filter((control) => {
+      return control.shiftCategoryOptions.length > 0;
+   });
+   return ppe;
 };
 
 const gatherCategoryIds = async () => {

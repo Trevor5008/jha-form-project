@@ -32,7 +32,7 @@ export default function PageTwo() {
             if (!res.ok) {
                throw new Error("Network response was not ok");
             }
-            res.json();
+            return res.json();
          })
          .then((res) => {
             setPermits(res.permitOpts);

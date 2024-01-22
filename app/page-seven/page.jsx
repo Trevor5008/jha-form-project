@@ -9,6 +9,7 @@ import {
    FormLabel,
    Radio,
    RadioGroup,
+   TextField,
    Typography,
    InputAdornment,
 } from "@mui/material";
@@ -30,7 +31,7 @@ export default function PageSeven() {
             if (!res.ok) {
                throw new Error("Network response was not ok");
             }
-            res.json();
+            return res.json();
          })
          .then((res) => {
             const { situations, hazards, hazardControls, ppe } = res;
@@ -47,7 +48,124 @@ export default function PageSeven() {
 
    return (
       <Container>
-         <h1>Page Seven</h1>
+         {/* Heading */}
+         <Typography variant="h2" marginBottom={1}>
+            <span style={{ fontWeight: "bold" }}>D.</span> This portion of this
+            JHA is to be completed by the supervisor with input from crew
+            members. Once complete this JHA must be reviewed with all affected
+            crew members or when conditions change
+         </Typography>
+         {/* Body */}
+         <Container>
+            {/* Situations */}
+            <Typography variant="h2" marginBottom={1} fontWeight="bold">
+               Work Activities based on C.1
+            </Typography>
+            {dataReady
+               ? situations.map((opt, idx) => {
+                    return (
+                       <Box display="flex" key={opt.name}>
+                          <TextField
+                             label={opt.name}
+                             variant="standard"
+                             fullWidth
+                             sx={{
+                                "& .MuiFormLabel-root": {
+                                   color: "black",
+                                   fontSize: {
+                                      xs: 14,
+                                      sm: 16,
+                                   },
+                                },
+                                paddingRight: 1,
+                             }}
+                          />
+                       </Box>
+                    );
+                 })
+               : null}
+            {/* Hazards */}
+            <Typography variant="h2" marginBottom={1} fontWeight="bold">
+               Possible Hazards based on C.2
+            </Typography>
+            {dataReady
+               ? hazards.map((opt, idx) => {
+                    return (
+                       <Box display="flex" key={opt.name}>
+                          <TextField
+                             label={opt.name}
+                             variant="standard"
+                             fullWidth
+                             sx={{
+                                "& .MuiFormLabel-root": {
+                                   color: "black",
+                                   fontSize: {
+                                      xs: 14,
+                                      sm: 16,
+                                   },
+                                },
+                                paddingRight: 1,
+                             }}
+                          />
+                       </Box>
+                    );
+                 })
+               : null}
+            {/* Hazard Controls */}
+            <Typography variant="h2" marginBottom={1} fontWeight="bold">
+               Controls to Address Hazards based on C.3
+            </Typography>
+            {dataReady
+               ? hazardControls.map((opt, idx) => {
+                    return (
+                       <Box display="flex" key={opt.name}>
+                          <TextField
+                             label={opt.name}
+                             variant="standard"
+                             fullWidth
+                             sx={{
+                                "& .MuiFormLabel-root": {
+                                   color: "black",
+                                   fontSize: {
+                                      xs: 14,
+                                      sm: 16,
+                                   },
+                                },
+                                paddingRight: 1,
+                             }}
+                          />
+                       </Box>
+                    );
+                 })
+               : null}
+            {/* PPE */}
+            <Typography variant="h2" marginBottom={1} fontWeight="bold">
+               PPE Controls based on C.4
+            </Typography>
+            {dataReady
+               ? ppe.map((opt, idx) => {
+                    return (
+                       <Box display="flex" key={opt.name}>
+                          <TextField
+                             label={opt.name}
+                             variant="standard"
+                             fullWidth
+                             sx={{
+                                "& .MuiFormLabel-root": {
+                                   color: "black",
+                                   fontSize: {
+                                      xs: 14,
+                                      sm: 16,
+                                   },
+                                },
+                                paddingRight: 1,
+                             }}
+                          />
+                       </Box>
+                    );
+                 })
+               : null}
+         </Container>
          {/* Navigation Buttons */}
          <Box display="flex" justifyContent="space-evenly">
             <Button variant="standard">
