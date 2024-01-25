@@ -51,6 +51,7 @@ model ShiftCategoryOption {
   categoryId        Int
   categoryOptionId  Int
   checked           Boolean
+  details           String
   shift             Shift     @relation(fields: [shiftId], references: [id])
   category          Category   @relation(fields: [categoryId], references: [id])
   categoryOption    CategoryOption  @relation(fields: [categoryOptionId], references: [id])
