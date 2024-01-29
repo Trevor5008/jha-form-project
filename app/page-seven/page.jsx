@@ -46,6 +46,69 @@ export default function PageSeven() {
          });
    }, [shiftId]);
 
+   function updateSituationDtls(idx, dtls) {
+      setSituations((prev) => {
+         const updatedDetails = [...prev];
+         updatedDetails[idx].shiftCategoryOptions[0].details = dtls;
+         return updatedDetails;
+      });
+   }
+   function updateHazardDtls(idx, dtls) {
+      setHazards((prev) => {
+         const updatedDetails = [...prev];
+         updatedDetails[idx].shiftCategoryOptions[0].details = dtls;
+         return updatedDetails;
+      });
+   }
+   function updateHazardCtrlDtls(idx, dtls) {
+      setHazardControls((prev) => {
+         const updatedDetails = [...prev];
+         updatedDetails[idx].shiftCategoryOptions[0].details = dtls;
+         return updatedDetails;
+      });
+   }
+   function updatePpeDtls(idx, dtls) {
+      setPpe((prev) => {
+         const updatedDetails = [...prev];
+         updatedDetails[idx].shiftCategoryOptions[0].details = dtls;
+         return updatedDetails;
+      });
+   }
+
+   function updateCategoryDtls(cat, idx, details) {
+      switch (cat) {
+         case "situations":
+            updateSituationDtls(idx, details);
+            break;
+         case "hazards":
+            updateHazardDtls(idx, details);
+            break;
+         case "hazard controls":
+            updateHazardCtrlDtls(idx, details);
+            break;
+         case "ppe":
+            updatePpeDtls(idx, details);
+            break;
+         default:
+            return null;
+      }
+   }
+
+   function handleNext() {
+      fetch("../api/update-page7-options/" + shiftId, {
+         method: "PATCH",
+         headers: {
+            "Content-Type": "application/json",
+         },
+         body: JSON.stringify({
+            situations,
+            hazards,
+            hazardControls,
+            ppe,
+         }),
+      });
+   }
+
    return (
       <Container>
          {/* Heading */}
@@ -79,6 +142,14 @@ export default function PageSeven() {
                                 },
                                 paddingRight: 1,
                              }}
+                             value={opt.shiftCategoryOptions[0].details}
+                             onChange={(e) =>
+                                updateCategoryDtls(
+                                   "situations",
+                                   idx,
+                                   e.target.value
+                                )
+                             }
                           />
                        </Box>
                     );
@@ -106,6 +177,14 @@ export default function PageSeven() {
                                 },
                                 paddingRight: 1,
                              }}
+                             value={opt.shiftCategoryOptions[0].details}
+                             onChange={(e) =>
+                                updateCategoryDtls(
+                                   "hazards",
+                                   idx,
+                                   e.target.value
+                                )
+                             }
                           />
                        </Box>
                     );
@@ -133,6 +212,14 @@ export default function PageSeven() {
                                 },
                                 paddingRight: 1,
                              }}
+                             value={opt.shiftCategoryOptions[0].details}
+                             onChange={(e) =>
+                                updateCategoryDtls(
+                                   "hazard controls",
+                                   idx,
+                                   e.target.value
+                                )
+                             }
                           />
                        </Box>
                     );
@@ -160,6 +247,10 @@ export default function PageSeven() {
                                 },
                                 paddingRight: 1,
                              }}
+                             value={opt.shiftCategoryOptions[0].details}
+                             onChange={(e) =>
+                                updateCategoryDtls("ppe", idx, e.target.value)
+                             }
                           />
                        </Box>
                     );
@@ -174,7 +265,7 @@ export default function PageSeven() {
                      pathname: "../page-six",
                      query: { id: shiftId },
                   }}
-                  //   onClick={handleNext}
+                  onClick={handleNext}
                >
                   Previous
                </Link>
@@ -185,9 +276,17 @@ export default function PageSeven() {
                      pathname: "../page-seven",
                      query: { id: shiftId },
                   }}
-                  //   onClick={handleNext}
+                  onClick={handleNext}
                >
                   Next
+               </Link>
+            </Button>
+         </Box>
+         {/* Home Button */}
+         <Box display="flex" justifyContent="space-evenly">
+            <Button variant="standard">
+               <Link href="/" onClick={handleNext}>
+                  Home
                </Link>
             </Button>
          </Box>

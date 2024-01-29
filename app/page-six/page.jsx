@@ -33,7 +33,7 @@ export default function PageFive() {
             //   )
          })
          .then(() => setDataReady(true))
-   }, [])
+   }, [shiftId])
 
    function handlePpeChange(idx, isChecked) {
       const val = isChecked === "true"
