@@ -6,8 +6,8 @@ export async function PATCH(request, { params }) {
    const data = JSON.parse(rawBody)
    const shiftId = Number(params.id)
 
-   // Hazards
-   // get hazards category id
+   // PPE
+    // Get PPE category ID
    const { id: ppeId } =
       await prisma.category.findFirst({
          where: {

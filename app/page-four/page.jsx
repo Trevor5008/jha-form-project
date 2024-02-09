@@ -34,7 +34,7 @@ export default function PageFour() {
             //   )
          })
          .then(() => setDataReady(true))
-   }, [])
+   }, [shiftId])
 
    function handleHazardChange(idx, isChecked) {
       const val = isChecked === "true"
@@ -95,7 +95,7 @@ export default function PageFour() {
                {dataReady
                   ? hazards.map((opt, idx) => {
                        return (
-                          <Box display="flex">
+                          <Box display="flex" key={opt.name}>
                              <FormControl
                                 className="mb-2 flex flex-nowrap items-center justify-between"
                                 fullWidth

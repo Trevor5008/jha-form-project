@@ -33,7 +33,7 @@ export default function PageFive() {
             //   )
          })
          .then(() => setDataReady(true))
-   }, [])
+   }, [shiftId])
 
    function handlePpeChange(idx, isChecked) {
       const val = isChecked === "true"
@@ -93,7 +93,7 @@ export default function PageFive() {
                {dataReady
                   ? ppe.map((opt, idx) => {
                        return (
-                          <Box display="flex">
+                          <Box display="flex" key={opt.name}>
                              <FormControl
                                 className="mb-2 flex flex-nowrap items-center justify-between"
                                 fullWidth
@@ -245,7 +245,7 @@ export default function PageFive() {
             <Button variant="standard">
                <Link
                   href={{
-                     pathname: "#",
+                     pathname: "../page-seven",
                      query: { id: shiftId }
                   }}
                   onClick={handleNext}

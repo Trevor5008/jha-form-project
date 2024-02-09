@@ -22,7 +22,8 @@ export async function POST(request, { params }) {
             shiftId: shift.id,
             categoryId: option.categoryId,
             categoryOptionId: option.id,
-            checked: false
+            checked: false,
+            details: ''
          }
       })
    }
