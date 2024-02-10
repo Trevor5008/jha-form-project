@@ -36,41 +36,47 @@ export default function HomePage() {
          .then((res) => setProjects(res.projects))
          .then(() => setDataReady(true));
    }
-
+   // TODO: Change to single project, header s/b project name
    return dataReady ? (
       <Container>
-         <Typography variant="h2">Project(s)</Typography>
          <List>
             {projects.map((opt, idx) => {
                return (
-                  <Box key={idx} marginLeft={2}>
-                     <ListItemText>{opt.name}</ListItemText>
+                  <Box key={idx}>
+                     <Typography
+                        variant="h2"
+                        sx={{
+                           fontWeight: "bold",
+                           marginTop: 2,
+                           marginBottom: 1,
+                        }}
+                     >
+                        {opt.name}
+                     </Typography>
                      <Box marginLeft={2}>
                         <Typography variant="h3">Task(s)</Typography>
                         {opt.Shifts.map((shift, idx) => {
                            return (
-                              <Box key={idx} marginLeft={2}>
-                                 <Button variant="outlined">
-                                    <Link
-                                       style={{
-                                          textDecoration: "none",
-                                          fontSize: 12
-                                       }}
-                                       sx={{
-                                          cursor: "pointer",
-                                       }}
-                                       href={{
-                                          pathname: "../page-two",
-                                          query: {
-                                             id: shift.id,
-                                          },
-                                       }}
-                                    >
-                                       New Shift
-                                    </Link>
-                                 </Button>
+                              <Box key={idx} marginLeft={2} marginY={2}>
+                                 <Link
+                                    style={{
+                                       textDecoration: "none",
+                                       fontSize: 12,
+                                    }}
+                                    sx={{
+                                       cursor: "pointer",
+                                    }}
+                                    href={{
+                                       pathname: "../page-two",
+                                       query: {
+                                          id: shift.id,
+                                       },
+                                    }}
+                                 >
+                                    {shift.name}
+                                 </Link>
                                  {/* Template has no shift id */}
-                                 <Button variant="outlined">
+                                 {/* <Button variant="outlined">
                                     <Link
                                        style={{
                                           textDecoration: "none",
@@ -85,12 +91,13 @@ export default function HomePage() {
                                     >
                                        Create Template
                                     </Link>
-                                 </Button>
+                                 </Button> */}
                               </Box>
                            );
                         })}
                      </Box>
-                     <Button variant="outlined" sx={{ marginLeft: 2 }}>
+                     <Box marginTop={5}>
+                     <Button variant="outlined">
                         {/* NextJs link, not Material UI */}
                         <Link
                            href={{
@@ -104,6 +111,7 @@ export default function HomePage() {
                            New Task
                         </Link>
                      </Button>
+                     </Box>
                   </Box>
                );
             })}
