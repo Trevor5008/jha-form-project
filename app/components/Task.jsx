@@ -1,5 +1,5 @@
-"use client"
-import { useEffect, useState } from "react"
+"use client";
+import { useEffect, useState } from "react";
 import {
    Typography,
    Container,
@@ -7,73 +7,19 @@ import {
    Box,
    FormControl,
    TextField
-} from "@mui/material"
-import DateTimeInput from "../components/DateTimeInput"
-import SelectInput from "../components/SelectInput"
-import {
-   companyNames,
-   supervisors,
-   foremen
-} from "../../lib/options"
-import { useSearchParams } from "next/navigation"
-import Link from "next/link"
+} from "@mui/material"  
+import SelectInput from "./SelectInput";
+import DateTimeInput from "./DateTimeInput";
+import Link from "next/link";
 
-export default function PageOne() {
-   const searchParams = useSearchParams()
-   const [dataReady, setDataReady] =
-      useState(false)
-   const [shiftDateTime, setShiftDateTime] =
-      useState(null)
-   const [companyName, setCompanyName] =
-      useState("")
-   const [supervisorName, setSupervisorName] =
-      useState("")
-   const [foremanName, setForemanName] =
-      useState("")
-   const [taskDescription, setTaskDescription] =
-      useState("")
-   const [shiftId, setShiftId] = useState(null)
+export default function HomePage() {
+   const [dataReady, setDataReady] = useState(false);
 
-   function handleShiftChange(val) {
-      setShiftDateTime(val.$d)
-   }
+   useEffect(() => {
 
-   function handleCompanyChange(evt) {
-      setCompanyName(evt.target.value)
-   }
+   }, []);
 
-   function handleSupervisorChange(evt) {
-      setSupervisorName(evt.target.value)
-   }
-
-   function handleForemanChange(evt) {
-      setForemanName(evt.target.value)
-   }
-
-   function handleTaskDescriptionChange(evt) {
-      setTaskDescription(evt.target.value)
-   }
-
-   async function handleTaskAdd() {
-      await fetch(
-         "../../api/add-shift/" +
-            searchParams.get("id"),
-         {
-            method: "POST",
-            headers: {
-               "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-               shiftDateTime,
-               taskDescription
-            })
-         }
-      )
-         .then((res) => res.json())
-         .then((res) => setShiftId(res.shiftId))
-         .then(() => setDataReady(true))
-   }
-   return (
+   return dataReady ? (
       <section>
          {/* Title */}
          <Typography
@@ -269,5 +215,5 @@ export default function PageOne() {
             )}
          </Box>
       </section>
-   )
+   ) : null;
 }
