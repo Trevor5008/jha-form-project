@@ -15,6 +15,8 @@ import {
    supervisors,
    foremen
 } from "../../lib/options"
+import Task from "../components/Task"
+import Shift from "../components/Shift"
 import { useSearchParams } from "next/navigation"
 import Link from "next/link"
 
@@ -22,37 +24,6 @@ export default function PageOne() {
    const searchParams = useSearchParams()
    const [dataReady, setDataReady] =
       useState(false)
-   const [shiftDateTime, setShiftDateTime] =
-      useState(null)
-   const [companyName, setCompanyName] =
-      useState("")
-   const [supervisorName, setSupervisorName] =
-      useState("")
-   const [foremanName, setForemanName] =
-      useState("")
-   const [taskDescription, setTaskDescription] =
-      useState("")
-   const [shiftId, setShiftId] = useState(null)
-
-   function handleShiftChange(val) {
-      setShiftDateTime(val.$d)
-   }
-
-   function handleCompanyChange(evt) {
-      setCompanyName(evt.target.value)
-   }
-
-   function handleSupervisorChange(evt) {
-      setSupervisorName(evt.target.value)
-   }
-
-   function handleForemanChange(evt) {
-      setForemanName(evt.target.value)
-   }
-
-   function handleTaskDescriptionChange(evt) {
-      setTaskDescription(evt.target.value)
-   }
 
    async function handleTaskAdd() {
       await fetch(
@@ -70,7 +41,7 @@ export default function PageOne() {
          }
       )
          .then((res) => res.json())
-         .then((res) => setShiftId(res.shiftId))
+         // .then((res) => setShiftId(res.shiftId))
          .then(() => setDataReady(true))
    }
    return (
@@ -100,140 +71,8 @@ export default function PageOne() {
             expires, it must be returned to the
             PSC/PSA for record purposes
          </Typography>
-         {/* 1st Row | Shift Date/Time */}
-         <Container
-            className="p-0 mt-5"
-            sx={{
-               display: "flex",
-               flexDirection: {
-                  xs: "column",
-                  sm: "row"
-               }
-            }}
-         >
-            {/* DateTime Input */}
-            <FormControl
-               sx={{
-                  marginLeft: {
-                     sm: ".5rem"
-                  },
-                  width: {
-                     xs: "100%",
-                     sm: "50%"
-                  },
-                  marginBottom: {
-                     xs: ".75rem"
-                  }
-               }}
-               required
-            >
-               <DateTimeInput
-                  required
-                  handleShiftChange={
-                     handleShiftChange
-                  }
-               />
-            </FormControl>
-         </Container>
-         {/* 2nd Row | Company Name, Supervisor */}
-         <Container
-            className="p-0"
-            sx={{
-               display: "flex",
-               flexDirection: {
-                  xs: "column",
-                  sm: "row"
-               }
-            }}
-         >
-            {/* Company Name */}
-            <FormControl
-               sx={{
-                  marginRight: {
-                     sm: ".5rem"
-                  },
-                  width: {
-                     xs: "100%",
-                     sm: "50%"
-                  },
-                  marginBottom: {
-                     xs: ".75rem"
-                  }
-               }}
-               required
-            >
-               <SelectInput
-                  name="Company Name"
-                  data={companyNames}
-                  handleChange={
-                     handleCompanyChange
-                  }
-               />
-            </FormControl>
-            {/* Supervisor */}
-            <FormControl
-               sx={{
-                  marginLeft: {
-                     sm: ".5rem"
-                  },
-                  width: {
-                     xs: "100%",
-                     sm: "50%"
-                  },
-                  marginBottom: {
-                     xs: ".75rem"
-                  }
-               }}
-               required
-            >
-               <SelectInput
-                  name="Supervisor"
-                  data={supervisors}
-                  handleChange={
-                     handleSupervisorChange
-                  }
-               />
-            </FormControl>
-            {/* Foreman */}
-            <FormControl
-               sx={{
-                  marginLeft: {
-                     sm: ".5rem"
-                  },
-                  width: {
-                     xs: "100%",
-                     sm: "50%"
-                  },
-                  marginBottom: {
-                     xs: ".75rem"
-                  }
-               }}
-               required
-            >
-               <SelectInput
-                  name="Foreman"
-                  data={foremen}
-                  handleChange={
-                     handleForemanChange
-                  }
-               />
-            </FormControl>
-         </Container>
-         {/* 3rd Row | Project Description*/}
-         <Container className="p-0 flex">
-            <FormControl fullWidth>
-               <TextField
-                  id="outlined-multiline-flexible"
-                  label="Description of work to be performed:"
-                  multiline
-                  rows={4}
-                  required
-                  onChange={
-                     handleTaskDescriptionChange
-                  }
-               />
-            </FormControl>
-         </Container>
+         <Task/>
+         <Shift/>
          {/* Navigation */}
          <Box
             display="flex"
@@ -242,16 +81,17 @@ export default function PageOne() {
             <Button variant="standard">
                <Link href="/">Home</Link>
             </Button>
-            {dataReady && shiftId ? (
+            {dataReady ? (
+            // {dataReady && shiftId ? (
                <Container>
-                  {" "}
+                  {" "} 
                   <Button variant="standard">
                      <Link
                         href={{
                            pathname:
                               "../page-two",
                            query: {
-                              id: shiftId
+                              // id: shiftId
                            }
                         }}
                      >

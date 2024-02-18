@@ -6,166 +6,65 @@ import {
    Button,
    Box,
    FormControl,
-   TextField
-} from "@mui/material"  
+   TextField,
+} from "@mui/material";
 import SelectInput from "./SelectInput";
-import DateTimeInput from "./DateTimeInput";
 import Link from "next/link";
 
-export default function HomePage() {
-   const [dataReady, setDataReady] = useState(false);
+export default function Task() {
+   const [supervisorName, setSupervisorName] = useState("");
+   const [taskDescription, setTaskDescription] = useState("");
+   const [taskId, setTaskId] = useState(null)
+   const [dataReady, setDataReady] = useState(true);
 
-   useEffect(() => {
+   useEffect(() => {}, []);
 
-   }, []);
+   function handleSupervisorChange(evt) {
+      setSupervisorName(evt.target.value0)
+   }
+
+   function handleTaskDescriptChange(evt) {
+      setTaskDescription(evt.target.value)
+   }
 
    return dataReady ? (
       <section>
-         {/* Title */}
-         <Typography
-            variant="h1"
-            className="my-3 text-center"
-         >
-            Daily Job Hazard Analysis
-         </Typography>
-         {/* Description */}
-         <Typography
-            variant="body1"
-            className="block text-justify"
-            align="justify"
-         >
-            This JHA is valid only for the work
-            and date specified. This JHA shall be
-            posted at the immediate work area
-            while the work is ongoing. If the
-            noted conditions change, the JHA shall
-            be re-evaluated to incorporate changes
-            and reissued immediately. Any
-            emergency or incident automatically
-            invalidates this JHA. When this JHA
-            expires, it must be returned to the
-            PSC/PSA for record purposes
-         </Typography>
-         {/* 1st Row | Shift Date/Time */}
-         <Container
-            className="p-0 mt-5"
-            sx={{
-               display: "flex",
-               flexDirection: {
-                  xs: "column",
-                  sm: "row"
-               }
-            }}
-         >
-            {/* DateTime Input */}
-            <FormControl
-               sx={{
-                  marginLeft: {
-                     sm: ".5rem"
-                  },
-                  width: {
-                     xs: "100%",
-                     sm: "50%"
-                  },
-                  marginBottom: {
-                     xs: ".75rem"
-                  }
-               }}
-               required
-            >
-               <DateTimeInput
-                  required
-                  handleShiftChange={
-                     handleShiftChange
-                  }
-               />
-            </FormControl>
-         </Container>
-         {/* 2nd Row | Company Name, Supervisor */}
+         <h1>Task</h1>
+         {/* 1st Row | Supervisor */}
          <Container
             className="p-0"
             sx={{
                display: "flex",
                flexDirection: {
                   xs: "column",
-                  sm: "row"
-               }
+                  sm: "row",
+               },
             }}
          >
-            {/* Company Name */}
-            <FormControl
-               sx={{
-                  marginRight: {
-                     sm: ".5rem"
-                  },
-                  width: {
-                     xs: "100%",
-                     sm: "50%"
-                  },
-                  marginBottom: {
-                     xs: ".75rem"
-                  }
-               }}
-               required
-            >
-               <SelectInput
-                  name="Company Name"
-                  data={companyNames}
-                  handleChange={
-                     handleCompanyChange
-                  }
-               />
-            </FormControl>
             {/* Supervisor */}
             <FormControl
                sx={{
                   marginLeft: {
-                     sm: ".5rem"
+                     sm: ".5rem",
                   },
                   width: {
                      xs: "100%",
-                     sm: "50%"
+                     sm: "50%",
                   },
                   marginBottom: {
-                     xs: ".75rem"
-                  }
+                     xs: ".75rem",
+                  },
                }}
                required
             >
                <SelectInput
                   name="Supervisor"
-                  data={supervisors}
-                  handleChange={
-                     handleSupervisorChange
-                  }
-               />
-            </FormControl>
-            {/* Foreman */}
-            <FormControl
-               sx={{
-                  marginLeft: {
-                     sm: ".5rem"
-                  },
-                  width: {
-                     xs: "100%",
-                     sm: "50%"
-                  },
-                  marginBottom: {
-                     xs: ".75rem"
-                  }
-               }}
-               required
-            >
-               <SelectInput
-                  name="Foreman"
-                  data={foremen}
-                  handleChange={
-                     handleForemanChange
-                  }
+                  // data={supervisors}
+                  handleChange={handleSupervisorChange}
                />
             </FormControl>
          </Container>
-         {/* 3rd Row | Project Description*/}
+         {/* 2nd Row | Task Description */}
          <Container className="p-0 flex">
             <FormControl fullWidth>
                <TextField
@@ -174,45 +73,36 @@ export default function HomePage() {
                   multiline
                   rows={4}
                   required
-                  onChange={
-                     handleTaskDescriptionChange
-                  }
+                  onChange={handleTaskDescriptChange}
+                  value={taskDescription}
                />
             </FormControl>
          </Container>
          {/* Navigation */}
-         <Box
-            display="flex"
-            justifyContent="center"
-         >
+         <Box display="flex" justifyContent="center">
             <Button variant="standard">
                <Link href="/">Home</Link>
             </Button>
-            {dataReady && shiftId ? (
-               <Container>
-                  {" "}
+            <Container>
+            {dataReady ? (
                   <Button variant="standard">
                      <Link
                         href={{
-                           pathname:
-                              "../page-two",
+                           pathname: "../page-two",
                            query: {
-                              id: shiftId
-                           }
+                              // id: shiftId,
+                           },
                         }}
                      >
                         Next
                      </Link>
                   </Button>
-               </Container>
             ) : (
-               <Button
-                  variant="standard"
-                  onClick={handleTaskAdd}
-               >
+               <Button variant="standard" onClick={handleTaskAdd}>
                   Save
                </Button>
             )}
+            </Container>
          </Box>
       </section>
    ) : null;
