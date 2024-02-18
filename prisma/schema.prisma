@@ -15,6 +15,14 @@ model Project {
   name              String    
   owner             String?  // pre-populated
   location          String?  // pre-populated
+  Tasks          Task[]
+}
+
+model Task {
+  id                Int           @id @default(autoincrement())
+  name              String 
+  project           Project       @relation(fields: [projectId], references: [id])
+  projectId         Int
   Shifts            Shift[]
 }
 
@@ -24,8 +32,8 @@ model Shift {
   endDateTime       DateTime?       
   description       String
   permits           Permit[]
-  project           Project       @relation(fields: [projectId], references: [id])
-  projectId         Int
+  task           Task       @relation(fields: [taskId], references: [id])
+  taskId         Int
   shiftCategoryOptions   ShiftCategoryOption[]
   miscOptions      MiscOption[]
 }

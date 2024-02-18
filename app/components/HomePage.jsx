@@ -1,5 +1,5 @@
-"use client"
-import { useEffect, useState } from "react"
+"use client";
+import { useEffect, useState } from "react";
 import {
    Typography,
    Container,
@@ -8,95 +8,104 @@ import {
    Box,
    InputLabel,
    Select,
-   MenuItem
-} from "@mui/material"
-import Link from "next/link"
-import { FormControl } from "@mui/material"
-import DateTimeInput from "./DateTimeInput"
-import SelectInput from "./SelectInput"
-import {
-   projectData,
-   companyNames,
-   supervisors,
-   foreman
-} from "@/lib/options"
+   MenuItem,
+   ListItemText,
+   ListItemButton,
+   List,
+   ListSubheader,
+} from "@mui/material";
+import Link from "next/link";
 
 export default function HomePage() {
-   const [projects, setProjects] = useState(null)
-   const [projectName, setProjectName] =
-      useState("")
-
-   const [shift, setShift] = useState(null)
-   const [dataReady, setDataReady] =
-      useState(false)
+   const [project, setProject] = useState(null);
+   const [dataReady, setDataReady] = useState(false);
 
    useEffect(() => {
-      loadProjects()
-      console.log("loaded")
-   }, [])
+      loadProject();
+   }, []);
 
-   async function loadProjects() {
-      fetch("../../api/load-projects")
+   async function loadProject() {
+      fetch("../../api/load-project")
          .then((res) => res.json())
-         .then((res) => setProjects(res.projects))
-         .then(() => setDataReady(true))
+         .then((res) => setProject(res.project))
+         .then(() => setDataReady(true));
    }
-
+   // TODO: Change to single project, header s/b project name
    return dataReady ? (
       <Container>
-         <h1>Tasks</h1>
-         {projects.map((opt, idx) => {
-            return (
-               <Container>
-                  <ul>
-                     {opt.name}
-                     {opt.Shifts.map((shift) => {
-                        return (
-                           <li>
-                              <Link
-                                 style={{
-                                    textDecoration:
-                                       "none"
-                                 }}
-                                 sx={{
-                                    cursor:
-                                       "pointer"
-                                 }}
-                                 href={{
-                                    pathname:
-                                       "../page-two",
-                                    query: {
-                                       id: shift.id
-                                    }
-                                 }}
-                              >
-                                 {
-                                    shift.description
-                                 }
-                              </Link>
-                           </li>
-                        )
-                     })}
-                  </ul>
-                  <Button>
-                     <Link
-                        href={{
-                           pathname: "../page-one",
-                           query: {
-                              id: opt.id
-                           }
-                        }}
-                        style={{
-                           textDecoration: "none",
-                           cursor: "pointer"
-                        }}
-                     >
-                        New Shift
-                     </Link>
-                  </Button>
-               </Container>
-            )
-         })}
+         <Box key={project.id}>
+            <Typography
+               variant="h2"
+               sx={{
+                  fontWeight: "bold",
+                  marginTop: 2,
+                  marginBottom: 1,
+               }}
+            >
+               {project.name}
+            </Typography>
+            <Box marginLeft={2}>
+               <Typography variant="h3">Task(s)</Typography>
+               {/* Change to task(s)*/}
+               {project.Tasks.map((shift, idx) => {
+                  return (
+                     <Box key={idx} marginLeft={2} marginY={2}>
+                        <Link
+                           style={{
+                              textDecoration: "none",
+                              fontSize: 12,
+                           }}
+                           sx={{
+                              cursor: "pointer",
+                           }}
+                           href={{
+                              pathname: "../page-two",
+                              query: {
+                                 id: shift.id,
+                              },
+                           }}
+                        >
+                           {shift.name}
+                        </Link>
+                        {/* Template has no shift id */}
+                        {/* <Button variant="outlined">
+                                    <Link
+                                       style={{
+                                          textDecoration: "none",
+                                          fontSize: 12
+                                       }}
+                                       sx={{
+                                          cursor: "pointer",
+                                       }}
+                                       href={{
+                                          pathname: "../page-two",
+                                       }}
+                                    >
+                                       Create Template
+                                    </Link>
+                                 </Button> */}
+                     </Box>
+                  );
+               })}
+            </Box>
+            <Box marginTop={5}>
+               <Button variant="outlined">
+                  {/* NextJs link, not Material UI */}
+                  <Link
+                     href={{
+                        pathname: "../page-one",
+                        query: {
+                           view: "task",
+                           // id: opt.id,
+                        },
+                     }}
+                     style={{ textDecoration: "none" }}
+                  >
+                     New Task
+                  </Link>
+               </Button>
+            </Box>
+         </Box>
       </Container>
-   ) : null
+   ) : null;
 }
