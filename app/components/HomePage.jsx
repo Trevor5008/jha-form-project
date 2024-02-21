@@ -35,7 +35,7 @@ export default function HomePage() {
       <Container>
          <Box key={project?.id}>
             <Typography
-               variant="h2"
+               variant="h1"
                sx={{
                   fontWeight: "bold",
                   marginTop: 2,
@@ -44,11 +44,12 @@ export default function HomePage() {
             >
                {project.name}
             </Typography>
-            <Box marginLeft={2}>
+            {/* Draft JHAs (In-progress) */}
+            <Box marginLeft={2} marginTop={1} marginBottom={2}>
                <Typography variant="h3">Draft JHAs</Typography>
                {project.Tasks.map((task, idx) => {
                   return (
-                     <Box key={idx} marginLeft={2} marginY={2}>
+                     <Box key={idx} marginLeft={2} marginY={1}>
                         <Link
                            style={{
                               textDecoration: "none",
@@ -63,10 +64,10 @@ export default function HomePage() {
                               },
                            }}
                         >
-                           {task.name}
+                           <Typography variant="h4">{task.name}</Typography>
                         </Link>
                         {/* New Shift Button */}
-                        <Box marginTop={1}>
+                        <Box marginLeft={1} marginTop={1}>
                            <Button variant="outlined" size="medium">
                               {/* NextJs link -> Task View*/}
                               <Link
@@ -79,7 +80,9 @@ export default function HomePage() {
                                  }}
                                  style={{ textDecoration: "none" }}
                               >
-                                 <Typography variant="body2">New Shift</Typography>
+                                 <Typography variant="body2">
+                                    New Shift
+                                 </Typography>
                               </Link>
                            </Button>
                         </Box>
@@ -104,8 +107,72 @@ export default function HomePage() {
                   );
                })}
             </Box>
-            {/* New Task Button */}
-            <Box marginTop={5}>
+            {/* Submitted JHAs (Awaiting GC Safety Team approval) */}
+            <Box marginLeft={2} marginTop={1} marginBottom={2}>
+               <Typography variant="h3">Submitted JHAs</Typography>
+               <Typography variant="body2" marginTop={.5}>* Awaiting GC Safety Team approval</Typography>
+               {project.Tasks.map((task, idx) => {
+                  return (
+                     <Box key={idx} marginLeft={2} marginY={1}>
+                        <Link
+                           style={{
+                              textDecoration: "none"
+                           }}
+                           href={{
+                              pathname: "../page-two",
+                              query: {
+                                 id: task.id,
+                              },
+                           }}
+                        >
+                           <Typography variant="h4">{task.name}</Typography>
+                        </Link>
+                        {/* Template has no shift id */}
+                        {/* <Button variant="outlined">
+                                    <Link
+                                       style={{
+                                          textDecoration: "none",
+                                          fontSize: 12
+                                       }}
+                                       sx={{
+                                          cursor: "pointer",
+                                       }}
+                                       href={{
+                                          pathname: "../page-two",
+                                       }}
+                                    >
+                                       Create Template
+                                    </Link>
+                                 </Button> */}
+                     </Box>
+                  );
+               })}
+            </Box>
+            {/* Active/Approved JHAs */}
+            <Box marginLeft={2} marginTop={1} marginBottom={2}>
+               <Typography variant="h3">Active JHAs</Typography>
+               {project.Tasks.map((task, idx) => {
+                  return (
+                     <Box key={idx} marginLeft={2} marginY={1}>
+                        <Link
+                           style={{
+                              textDecoration: "none"
+                           }}
+                           href={{
+                              pathname: "../page-two",
+                              query: {
+                                 id: task.id,
+                              },
+                           }}
+                        >
+                           <Typography variant="h4">{task.name}</Typography>
+                        </Link>
+                     </Box>
+                  );
+               })}
+            </Box>
+            {/* Create Task Button */}
+            <Box marginLeft={2} marginTop={3}>
                <Button variant="outlined">
                   {/* NextJs link -> Task View*/}
                   <Link
@@ -118,7 +185,7 @@ export default function HomePage() {
                      }}
                      style={{ textDecoration: "none" }}
                   >
-                     New Task
+                     Create Task
                   </Link>
                </Button>
             </Box>
