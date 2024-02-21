@@ -22,7 +22,7 @@ export default function HomePage() {
 
    useEffect(() => {
       loadProject();
-   }, []);
+   }, [project]);
 
    async function loadProject() {
       fetch("../../api/load-project")
@@ -31,9 +31,9 @@ export default function HomePage() {
          .then(() => setDataReady(true));
    }
    // TODO: Change to single project, header s/b project name
-   return dataReady ? (
+   return dataReady && project ? (
       <Container>
-         <Box key={project.id}>
+         <Box key={project?.id}>
             <Typography
                variant="h2"
                sx={{
@@ -45,15 +45,13 @@ export default function HomePage() {
                {project.name}
             </Typography>
             <Box marginLeft={2}>
-               <Typography variant="h3">Task(s)</Typography>
-               {/* Change to task(s)*/}
-               {project.Tasks.map((shift, idx) => {
+               <Typography variant="h3">Draft JHAs</Typography>
+               {project.Tasks.map((task, idx) => {
                   return (
                      <Box key={idx} marginLeft={2} marginY={2}>
                         <Link
                            style={{
                               textDecoration: "none",
-                              fontSize: 12,
                            }}
                            sx={{
                               cursor: "pointer",
@@ -61,12 +59,30 @@ export default function HomePage() {
                            href={{
                               pathname: "../page-two",
                               query: {
-                                 id: shift.id,
+                                 id: task.id,
                               },
                            }}
                         >
-                           {shift.name}
+                           {task.name}
                         </Link>
+                        {/* New Shift Button */}
+                        <Box marginTop={1}>
+                           <Button variant="outlined" size="medium">
+                              {/* NextJs link -> Task View*/}
+                              <Link
+                                 href={{
+                                    pathname: "../page-one",
+                                    query: {
+                                       view: "shift",
+                                       taskId: task.id,
+                                    },
+                                 }}
+                                 style={{ textDecoration: "none" }}
+                              >
+                                 <Typography variant="body2">New Shift</Typography>
+                              </Link>
+                           </Button>
+                        </Box>
                         {/* Template has no shift id */}
                         {/* <Button variant="outlined">
                                     <Link
@@ -88,15 +104,16 @@ export default function HomePage() {
                   );
                })}
             </Box>
+            {/* New Task Button */}
             <Box marginTop={5}>
                <Button variant="outlined">
-                  {/* NextJs link, not Material UI */}
+                  {/* NextJs link -> Task View*/}
                   <Link
                      href={{
                         pathname: "../page-one",
                         query: {
                            view: "task",
-                           // id: opt.id,
+                           projectId: project?.id,
                         },
                      }}
                      style={{ textDecoration: "none" }}

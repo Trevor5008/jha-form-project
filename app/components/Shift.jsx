@@ -6,29 +6,38 @@ import {
    Button,
    Box,
    FormControl,
-   TextField
-} from "@mui/material"  
+   TextField,
+} from "@mui/material";
 import SelectInput from "./SelectInput";
 import DateTimeInput from "./DateTimeInput";
-import { useSearchParams } from "next/navigation";
+import { foremenData } from "@/lib/options";
 import Link from "next/link";
 
-export default function Shift() {
-   const searchParams = useSearchParams()
-   const [foremanName, setForemanName] =
-      useState("")
-   const [shiftDateTime, setShiftDateTime] =
-   useState(null)
-   const [shiftId, setShiftId] = useState(null)
+export default function Shift({ taskId, handleShiftAdd }) {
+   const [foremen, setForemen] = useState([]);
+   const [foremanName, setForemanName] = useState("");
+   const [shiftDateTime, setShiftDateTime] = useState(null);
+   const [shiftId, setShiftId] = useState(null);
    const [dataReady, setDataReady] = useState(true);
 
-   useEffect(() => {}, []);
+   useEffect(() => {
+      loadForemen();
+      if (foremen) setDataReady(true);
+   }, [foremen, taskId, shiftId]);
+
+   async function loadForemen() {
+      setForemen(foremenData);
+      // fetch("../../api/load-supervisors")
+      //    .then((res) => res.json())
+      //    .then((res) => setSupervisors(res.supervisors))
+      //    .then(() => setDataReady(true))
+   }
 
    function handleForemanChange(evt) {
-      setForemanName(evt.target.value)
+      setForemanName(evt.target.value);
    }
    function handleShiftChange(val) {
-      setShiftDateTime(val.$d)
+      setShiftDateTime(val.$d);
    }
 
    return dataReady ? (
@@ -41,32 +50,30 @@ export default function Shift() {
                display: "flex",
                flexDirection: {
                   xs: "column",
-                  sm: "row"
-               }
+                  sm: "row",
+               },
             }}
          >
             {/* Foreman */}
             <FormControl
                sx={{
                   marginLeft: {
-                     sm: ".5rem"
+                     sm: ".5rem",
                   },
                   width: {
                      xs: "100%",
-                     sm: "50%"
+                     sm: "50%",
                   },
                   marginBottom: {
-                     xs: ".75rem"
-                  }
+                     xs: ".75rem",
+                  },
                }}
                required
             >
                <SelectInput
                   name="Foreman"
                   // data={foremen}
-                  handleChange={
-                     handleForemanChange
-                  }
+                  handleChange={handleForemanChange}
                />
             </FormControl>
          </Container>
@@ -77,67 +84,38 @@ export default function Shift() {
                display: "flex",
                flexDirection: {
                   xs: "column",
-                  sm: "row"
-               }
+                  sm: "row",
+               },
             }}
          >
             {/* DateTime Input */}
             <FormControl
                sx={{
                   marginLeft: {
-                     sm: ".5rem"
+                     sm: ".5rem",
                   },
                   width: {
                      xs: "100%",
-                     sm: "50%"
+                     sm: "50%",
                   },
                   marginBottom: {
-                     xs: ".75rem"
-                  }
+                     xs: ".75rem",
+                  },
                }}
                required
             >
-               <DateTimeInput
-                  required
-                  handleShiftChange={
-                     handleShiftChange
-                  }
-               />
+               <DateTimeInput required handleShiftChange={handleShiftChange} />
             </FormControl>
          </Container>
-         {/* Navigation */}
-         <Box
-            display="flex"
-            justifyContent="center"
-         >
-            <Button variant="standard">
-               <Link href="/">Home</Link>
+         {/* Save Button */}
+         <Box display="flex" justifyContent="center">
+            <Button
+               variant="standard"
+               onClick={() => handleShiftAdd(foremanName, shiftDateTime)}
+               disabled={!foremanName || !shiftDateTime}
+            >
+               Save
             </Button>
-            {dataReady ? (
-               <Container>
-                  {" "}
-                  <Button variant="standard">
-                     <Link
-                        href={{
-                           pathname:
-                              "../page-two",
-                           query: {
-                              // id: shiftId
-                           }
-                        }}
-                     >
-                        Next
-                     </Link>
-                  </Button>
-               </Container>
-            ) : (
-               <Button
-                  variant="standard"
-                  onClick={handleTaskAdd}
-               >
-                  Save
-               </Button>
-            )}
          </Box>
       </section>
    ) : null;

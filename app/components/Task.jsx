@@ -8,26 +8,39 @@ import {
    FormControl,
    TextField,
 } from "@mui/material";
+import { supervisors } from "@/lib/options";
 import SelectInput from "./SelectInput";
 import Link from "next/link";
 
-export default function Task() {
-   const [supervisorName, setSupervisorName] = useState("");
-   const [taskDescription, setTaskDescription] = useState("");
-   const [taskId, setTaskId] = useState(null)
-   const [dataReady, setDataReady] = useState(true);
+export default function Task({ projectId, handleTaskAdd }) {
+   const [supers, setSupers] = useState([]);
+   const [supervisorName, setSupervisorName] = useState(null);
+   const [taskDescription, setTaskDescription] = useState(null);
+   const [taskId, setTaskId] = useState(null);
+   const [dataReady, setDataReady] = useState(false);
 
-   useEffect(() => {}, []);
+   useEffect(() => {
+      loadSupervisors();
+      if (supers) setDataReady(true);
+   }, [supers, projectId, taskId]);
+
+   async function loadSupervisors() {
+      setSupers(supervisors);
+      // fetch("../../api/load-supervisors")
+      //    .then((res) => res.json())
+      //    .then((res) => setSupervisors(res.supervisors))
+      //    .then(() => setDataReady(true))
+   }
 
    function handleSupervisorChange(evt) {
-      setSupervisorName(evt.target.value0)
+      setSupervisorName(evt.target.value);
    }
 
    function handleTaskDescriptChange(evt) {
-      setTaskDescription(evt.target.value)
+      setTaskDescription(evt.target.value);
    }
 
-   return dataReady ? (
+   return dataReady && projectId ? (
       <section>
          <h1>Task</h1>
          {/* 1st Row | Supervisor */}
@@ -59,7 +72,7 @@ export default function Task() {
             >
                <SelectInput
                   name="Supervisor"
-                  // data={supervisors}
+                  data={supers}
                   handleChange={handleSupervisorChange}
                />
             </FormControl>
@@ -78,31 +91,15 @@ export default function Task() {
                />
             </FormControl>
          </Container>
-         {/* Navigation */}
+         {/* Save Button */}
          <Box display="flex" justifyContent="center">
-            <Button variant="standard">
-               <Link href="/">Home</Link>
+            <Button
+               variant="standard"
+               onClick={() => handleTaskAdd(supervisorName, taskDescription)}
+               disabled={!supervisorName || !taskDescription}
+            >
+               Save
             </Button>
-            <Container>
-            {dataReady ? (
-                  <Button variant="standard">
-                     <Link
-                        href={{
-                           pathname: "../page-two",
-                           query: {
-                              // id: shiftId,
-                           },
-                        }}
-                     >
-                        Next
-                     </Link>
-                  </Button>
-            ) : (
-               <Button variant="standard" onClick={handleTaskAdd}>
-                  Save
-               </Button>
-            )}
-            </Container>
          </Box>
       </section>
    ) : null;
