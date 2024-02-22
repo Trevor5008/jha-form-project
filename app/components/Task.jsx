@@ -42,7 +42,6 @@ export default function Task({ projectId, handleTaskAdd }) {
 
    return dataReady && projectId ? (
       <section>
-         <h1>Task</h1>
          {/* 1st Row | Supervisor */}
          <Container
             className="p-0"
@@ -52,20 +51,15 @@ export default function Task({ projectId, handleTaskAdd }) {
                   xs: "column",
                   sm: "row",
                },
+               marginTop: 2
             }}
          >
             {/* Supervisor */}
             <FormControl
                sx={{
-                  marginLeft: {
-                     sm: ".5rem",
-                  },
                   width: {
                      xs: "100%",
                      sm: "50%",
-                  },
-                  marginBottom: {
-                     xs: ".75rem",
                   },
                }}
                required
@@ -88,6 +82,14 @@ export default function Task({ projectId, handleTaskAdd }) {
                   required
                   onChange={handleTaskDescriptChange}
                   value={taskDescription}
+                  sx={{
+                     "& .MuiFormLabel-root": {
+                        fontSize: "15px"
+                     },
+                     "& .MuiInputBase-root span": {
+                        fontSize: "12px"
+                     }
+                  }}
                />
             </FormControl>
          </Container>

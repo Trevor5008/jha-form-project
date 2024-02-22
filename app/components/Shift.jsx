@@ -42,7 +42,6 @@ export default function Shift({ taskId, handleShiftAdd }) {
 
    return dataReady ? (
       <section>
-         <h1>Shift</h1>
          {/* 1st Row | Foreman */}
          <Container
             className="p-0"
@@ -52,9 +51,10 @@ export default function Shift({ taskId, handleShiftAdd }) {
                   xs: "column",
                   sm: "row",
                },
+               marginTop: 2
             }}
          >
-            {/* Foreman */}
+            {/* Personnel Select */}
             <FormControl
                sx={{
                   marginLeft: {
@@ -63,10 +63,7 @@ export default function Shift({ taskId, handleShiftAdd }) {
                   width: {
                      xs: "100%",
                      sm: "50%",
-                  },
-                  marginBottom: {
-                     xs: ".75rem",
-                  },
+                  }
                }}
                required
             >

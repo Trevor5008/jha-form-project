@@ -15,7 +15,16 @@ export default function DateTimeInput({ handleShiftChange }) {
                   required: true
                }
             }}
+            disablePast={true}
             onChange={(newVal) => handleShiftChange(newVal)}
+            sx={{
+               "& label": {
+                  fontSize: "15px"
+               },
+               "& span": {
+                  fontSize: "12px"
+               }
+            }}
          />
       </LocalizationProvider>
    )
