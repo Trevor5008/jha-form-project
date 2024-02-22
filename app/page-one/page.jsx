@@ -13,6 +13,7 @@ import SelectInput from "../components/SelectInput";
 import { companyNames, supervisors, foremen } from "../../lib/options";
 import Task from "../components/Task";
 import Shift from "../components/Shift";
+import Header from "../components/Header";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
@@ -78,16 +79,19 @@ export default function PageOne() {
       // }).then(() => setDataReady(true));
    }
    return (
-      <section>
+      <>
+      <Header/>
+      <Container>
          {/* Title */}
-         <Typography variant="h1" className="my-3 text-center">
+         <Typography variant="h2" textAlign="center" sx={{ marginTop: 2 }}>
             Daily Job Hazard Analysis
          </Typography>
          {/* Description */}
          <Typography
-            variant="body1"
+            variant="h4"
             className="block text-justify"
             align="justify"
+            sx={{ marginTop: 2, marginBottom: 4 }}
          >
             This JHA is valid only for the work and date specified. This JHA
             shall be posted at the immediate work area while the work is
@@ -125,6 +129,7 @@ export default function PageOne() {
                </Link>
             </Button>
          </Box>
-      </section>
+      </Container>
+      </>
    );
 }

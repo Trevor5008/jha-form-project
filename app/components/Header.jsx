@@ -8,8 +8,8 @@ export default function Header() {
          border={2}
          paddingY={.5}
          alignItems='center'
-         marginTop={2}
          textAlign='center'
+         margin={.5}
          sx={{
             flexDirection: {
                 xs: 'column',
@@ -25,7 +25,7 @@ export default function Header() {
          }}
       >
          <Typography
-            variant="h3"
+            variant="h4"
             textTransform="uppercase"
             fontWeight="bolder"
             sx={{
@@ -41,7 +41,7 @@ export default function Header() {
             Exhibit M
          </Typography>
          <Typography
-            variant="h3"
+            variant="h4"
             textTransform="uppercase"
             fontWeight="bolder"
             sx={{

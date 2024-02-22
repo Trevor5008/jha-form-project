@@ -76,7 +76,6 @@ export default function Shift({ taskId, handleShiftAdd }) {
          </Container>
          {/* 2nd Row | Shift Date/Time */}
          <Container
-            className="p-0 mt-5"
             sx={{
                display: "flex",
                flexDirection: {

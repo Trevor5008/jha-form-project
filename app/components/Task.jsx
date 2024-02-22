@@ -72,7 +72,7 @@ export default function Task({ projectId, handleTaskAdd }) {
             </FormControl>
          </Container>
          {/* 2nd Row | Task Description */}
-         <Container className="p-0 flex">
+         <Container>
             <FormControl fullWidth>
                <TextField
                   id="outlined-multiline-flexible"

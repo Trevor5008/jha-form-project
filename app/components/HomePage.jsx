@@ -46,7 +46,7 @@ export default function HomePage() {
             </Typography>
             {/* Draft JHAs (In-progress) */}
             <Box marginLeft={2} marginTop={1} marginBottom={2}>
-               <Typography variant="h3">Draft JHAs</Typography>
+               <Typography variant="h4">Draft JHAs</Typography>
                {project.Tasks.map((task, idx) => {
                   return (
                      <Box key={idx} marginLeft={2} marginY={1}>
@@ -64,7 +64,7 @@ export default function HomePage() {
                               },
                            }}
                         >
-                           <Typography variant="h4">{task.name}</Typography>
+                           <Typography variant="h5">{task.name}</Typography>
                         </Link>
                         {/* New Shift Button */}
                         <Box marginLeft={1} marginTop={1}>
@@ -109,7 +109,7 @@ export default function HomePage() {
             </Box>
             {/* Submitted JHAs (Awaiting GC Safety Team approval) */}
             <Box marginLeft={2} marginTop={1} marginBottom={2}>
-               <Typography variant="h3">Submitted JHAs</Typography>
+               <Typography variant="h4">Submitted JHAs</Typography>
                <Typography variant="body2" marginTop={.5}>* Awaiting GC Safety Team approval</Typography>
                {project.Tasks.map((task, idx) => {
                   return (
@@ -125,7 +125,7 @@ export default function HomePage() {
                               },
                            }}
                         >
-                           <Typography variant="h4">{task.name}</Typography>
+                           <Typography variant="h5">{task.name}</Typography>
                         </Link>
                         {/* Template has no shift id */}
                         {/* <Button variant="outlined">
@@ -150,7 +150,7 @@ export default function HomePage() {
             </Box>
             {/* Active/Approved JHAs */}
             <Box marginLeft={2} marginTop={1} marginBottom={2}>
-               <Typography variant="h3">Active JHAs</Typography>
+               <Typography variant="h4">Active JHAs</Typography>
                {project.Tasks.map((task, idx) => {
                   return (
                      <Box key={idx} marginLeft={2} marginY={1}>
@@ -165,7 +165,7 @@ export default function HomePage() {
                               },
                            }}
                         >
-                           <Typography variant="h4">{task.name}</Typography>
+                           <Typography variant="h5">{task.name}</Typography>
                         </Link>
                      </Box>
                   );
