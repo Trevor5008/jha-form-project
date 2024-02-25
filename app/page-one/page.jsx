@@ -22,7 +22,8 @@ export default function PageOne() {
    const [view, setView] = useState(null);
    const [projectId, setProjectId] = useState(null);
    const [taskId, setTaskId] = useState(null);
-   const [supervisorName, setSupervisorName] = useState(null);
+   const [supervisor, setSupervisor] = useState(null);
+   const [foreman, setForeman] = useState(null)
    // Flag for rendering form if options loaded
    const [dataReady, setDataReady] = useState(false);
 
@@ -43,8 +44,9 @@ export default function PageOne() {
             "Content-Type": "application/json",
          },
          body: JSON.stringify({
-            supervisorName: supervisor,
-            taskDescription: task,
+            projectId,
+            supervisor,
+            task
          }),
       }).then(() => setDataReady(true));
       // await fetch(
@@ -56,8 +58,8 @@ export default function PageOne() {
       //          "Content-Type": "application/json"
       //       },
       //       body: JSON.stringify({
+      //          foreman,
       //          shiftDateTime,
-      //          taskDescription
       //       })
       //    }
       // )

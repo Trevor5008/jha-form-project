@@ -6,12 +6,14 @@ export async function POST(request, { params }) {
    const rawBody = await request.text();
    const data = JSON.parse(rawBody);
    const projectId = Number(params["projectId"]);
+   const { supervisor, task } = data
+   console.log(supervisor, task)
 
    await prisma.task.create({
       data: {
-         id: true,
-         name: true,
-         Tasks: [],
+         projectId,
+         name: task,
+         supervisor
       },
    });
    return NextResponse.json({ task });
