@@ -67,18 +67,18 @@ export default function PageOne() {
       //    // .then((res) => setShiftId(res.shiftId))
       //    .then(() => setDataReady(true))
    }
-   async function handleShiftAdd(foreman, shift) {
+   async function handleShiftAdd(foreman, startDateTime) {
       setDataReady(true)
-      // await fetch("../../api/add-shift/" + taskId, {
-      //    method: "POST",
-      //    headers: {
-      //       "Content-Type": "application/json",
-      //    },
-      //    body: JSON.stringify({
-      //       supervisorName: supervisor,
-      //       taskDescription: task,
-      //    }),
-      // }).then(() => setDataReady(true));
+      await fetch("../../api/add-shift/" + taskId, {
+         method: "POST",
+         headers: {
+            "Content-Type": "application/json",
+         },
+         body: JSON.stringify({
+            foreman,
+            startDateTime,
+         }),
+      }).then(() => setDataReady(true));
    }
    return (
       <>

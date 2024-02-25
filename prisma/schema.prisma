@@ -32,7 +32,6 @@ model Shift {
   foreman           String
   startDateTime     DateTime      
   endDateTime       DateTime?       
-  description       String
   permits           Permit[]
   task           Task       @relation(fields: [taskId], references: [id])
   taskId         Int

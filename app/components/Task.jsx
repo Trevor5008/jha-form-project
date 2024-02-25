@@ -24,6 +24,7 @@ export default function Task({ projectId, handleTaskAdd }) {
       if (supers) setDataReady(true);
    }, [supers, projectId, taskId]);
 
+   // TODO: Transition from json data to db lookup
    async function loadSupervisors() {
       setSupers(supervisors);
       // fetch("../../api/load-supervisors")

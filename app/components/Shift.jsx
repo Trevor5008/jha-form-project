@@ -16,7 +16,7 @@ import Link from "next/link";
 export default function Shift({ taskId, handleShiftAdd }) {
    const [foremen, setForemen] = useState([]);
    const [foremanName, setForemanName] = useState("");
-   const [shiftDateTime, setShiftDateTime] = useState(null);
+   const [startDateTime, setStartDateTime] = useState(null);
    const [shiftId, setShiftId] = useState(null);
    const [dataReady, setDataReady] = useState(true);
 
@@ -25,6 +25,7 @@ export default function Shift({ taskId, handleShiftAdd }) {
       if (foremen) setDataReady(true);
    }, [foremen, taskId, shiftId]);
 
+   // TODO: Load foreman from db instead of json
    async function loadForemen() {
       setForemen(foremenData);
       // fetch("../../api/load-supervisors")
@@ -37,7 +38,7 @@ export default function Shift({ taskId, handleShiftAdd }) {
       setForemanName(evt.target.value);
    }
    function handleShiftChange(val) {
-      setShiftDateTime(val.$d);
+      setStartDateTime(val.$d);
    }
 
    return dataReady ? (
@@ -69,7 +70,7 @@ export default function Shift({ taskId, handleShiftAdd }) {
             >
                <SelectInput
                   name="Foreman"
-                  // data={foremen}
+                  data={foremenData}
                   handleChange={handleForemanChange}
                />
             </FormControl>
@@ -107,8 +108,8 @@ export default function Shift({ taskId, handleShiftAdd }) {
          <Box display="flex" justifyContent="center">
             <Button
                variant="standard"
-               onClick={() => handleShiftAdd(foremanName, shiftDateTime)}
-               disabled={!foremanName || !shiftDateTime}
+               onClick={() => handleShiftAdd(foremanName, startDateTime)}
+               disabled={!foremanName || !startDateTime}
             >
                Save
             </Button>
