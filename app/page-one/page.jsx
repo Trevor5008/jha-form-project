@@ -1,273 +1,137 @@
-"use client"
-import { useEffect, useState } from "react"
+"use client";
+import { useEffect, useState } from "react";
 import {
    Typography,
    Container,
    Button,
    Box,
    FormControl,
-   TextField
-} from "@mui/material"
-import DateTimeInput from "../components/DateTimeInput"
-import SelectInput from "../components/SelectInput"
-import {
-   companyNames,
-   supervisors,
-   foremen
-} from "../../lib/options"
-import { useSearchParams } from "next/navigation"
-import Link from "next/link"
+   TextField,
+} from "@mui/material";
+import DateTimeInput from "../components/DateTimeInput";
+import SelectInput from "../components/SelectInput";
+import { companyNames, supervisors, foremen } from "../../lib/options";
+import Task from "../components/Task";
+import Shift from "../components/Shift";
+import Header from "../components/Header";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 export default function PageOne() {
-   const searchParams = useSearchParams()
-   const [dataReady, setDataReady] =
-      useState(false)
-   const [shiftDateTime, setShiftDateTime] =
-      useState(null)
-   const [companyName, setCompanyName] =
-      useState("")
-   const [supervisorName, setSupervisorName] =
-      useState("")
-   const [foremanName, setForemanName] =
-      useState("")
-   const [taskDescription, setTaskDescription] =
-      useState("")
-   const [shiftId, setShiftId] = useState(null)
+   const searchParams = useSearchParams();
+   const [view, setView] = useState(null);
+   const [projectId, setProjectId] = useState(null);
+   const [taskId, setTaskId] = useState(null);
+   const [supervisor, setSupervisor] = useState(null);
+   const [foreman, setForeman] = useState(null)
+   // Flag for rendering form if options loaded
+   const [dataReady, setDataReady] = useState(false);
 
-   function handleShiftChange(val) {
-      setShiftDateTime(val.$d)
+   useEffect(() => {
+      setView(searchParams.get("view"));
+      // Task or Shift view options
+      if (view === "task") {
+         setProjectId(searchParams.get("projectId"));
+      } else {
+         setTaskId(searchParams.get("taskId"));
+      }
+   }, [view, projectId, taskId, searchParams]);
+
+   async function handleTaskAdd(supervisor, task) {
+      await fetch("../../api/add-task/" + projectId, {
+         method: "POST",
+         headers: {
+            "Content-Type": "application/json",
+         },
+         body: JSON.stringify({
+            projectId,
+            supervisor,
+            task
+         }),
+      }).then(() => setDataReady(true));
+      // await fetch(
+      //    "../../api/add-shift/" +
+      //       searchParams.get("id"),
+      //    {
+      //       method: "POST",
+      //       headers: {
+      //          "Content-Type": "application/json"
+      //       },
+      //       body: JSON.stringify({
+      //          foreman,
+      //          shiftDateTime,
+      //       })
+      //    }
+      // )
+      //    .then((res) => res.json())
+      //    // .then((res) => setShiftId(res.shiftId))
+      //    .then(() => setDataReady(true))
    }
-
-   function handleCompanyChange(evt) {
-      setCompanyName(evt.target.value)
-   }
-
-   function handleSupervisorChange(evt) {
-      setSupervisorName(evt.target.value)
-   }
-
-   function handleForemanChange(evt) {
-      setForemanName(evt.target.value)
-   }
-
-   function handleTaskDescriptionChange(evt) {
-      setTaskDescription(evt.target.value)
-   }
-
-   async function handleTaskAdd() {
-      await fetch(
-         "../../api/add-shift/" +
-            searchParams.get("id"),
-         {
-            method: "POST",
-            headers: {
-               "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-               shiftDateTime,
-               taskDescription
-            })
-         }
-      )
-         .then((res) => res.json())
-         .then((res) => setShiftId(res.shiftId))
-         .then(() => setDataReady(true))
+   async function handleShiftAdd(foreman, shift) {
+      setDataReady(true)
+      // await fetch("../../api/add-shift/" + taskId, {
+      //    method: "POST",
+      //    headers: {
+      //       "Content-Type": "application/json",
+      //    },
+      //    body: JSON.stringify({
+      //       supervisorName: supervisor,
+      //       taskDescription: task,
+      //    }),
+      // }).then(() => setDataReady(true));
    }
    return (
-      <section>
+      <>
+      <Header/>
+      <Container>
          {/* Title */}
-         <Typography
-            variant="h1"
-            className="my-3 text-center"
-         >
+         <Typography variant="h2" textAlign="center" sx={{ marginTop: 2 }}>
             Daily Job Hazard Analysis
          </Typography>
          {/* Description */}
          <Typography
-            variant="body1"
+            variant="h4"
             className="block text-justify"
             align="justify"
+            sx={{ marginTop: 2, marginBottom: 4 }}
          >
-            This JHA is valid only for the work
-            and date specified. This JHA shall be
-            posted at the immediate work area
-            while the work is ongoing. If the
-            noted conditions change, the JHA shall
-            be re-evaluated to incorporate changes
-            and reissued immediately. Any
-            emergency or incident automatically
-            invalidates this JHA. When this JHA
-            expires, it must be returned to the
-            PSC/PSA for record purposes
+            This JHA is valid only for the work and date specified. This JHA
+            shall be posted at the immediate work area while the work is
+            ongoing. If the noted conditions change, the JHA shall be
+            re-evaluated to incorporate changes and reissued immediately. Any
+            emergency or incident automatically invalidates this JHA. When this
+            JHA expires, it must be returned to the PSC/PSA for record purposes
          </Typography>
-         {/* 1st Row | Shift Date/Time */}
-         <Container
-            className="p-0 mt-5"
-            sx={{
-               display: "flex",
-               flexDirection: {
-                  xs: "column",
-                  sm: "row"
-               }
-            }}
-         >
-            {/* DateTime Input */}
-            <FormControl
-               sx={{
-                  marginLeft: {
-                     sm: ".5rem"
-                  },
-                  width: {
-                     xs: "100%",
-                     sm: "50%"
-                  },
-                  marginBottom: {
-                     xs: ".75rem"
-                  }
-               }}
-               required
-            >
-               <DateTimeInput
-                  required
-                  handleShiftChange={
-                     handleShiftChange
-                  }
-               />
-            </FormControl>
-         </Container>
-         {/* 2nd Row | Company Name, Supervisor */}
-         <Container
-            className="p-0"
-            sx={{
-               display: "flex",
-               flexDirection: {
-                  xs: "column",
-                  sm: "row"
-               }
-            }}
-         >
-            {/* Company Name */}
-            <FormControl
-               sx={{
-                  marginRight: {
-                     sm: ".5rem"
-                  },
-                  width: {
-                     xs: "100%",
-                     sm: "50%"
-                  },
-                  marginBottom: {
-                     xs: ".75rem"
-                  }
-               }}
-               required
-            >
-               <SelectInput
-                  name="Company Name"
-                  data={companyNames}
-                  handleChange={
-                     handleCompanyChange
-                  }
-               />
-            </FormControl>
-            {/* Supervisor */}
-            <FormControl
-               sx={{
-                  marginLeft: {
-                     sm: ".5rem"
-                  },
-                  width: {
-                     xs: "100%",
-                     sm: "50%"
-                  },
-                  marginBottom: {
-                     xs: ".75rem"
-                  }
-               }}
-               required
-            >
-               <SelectInput
-                  name="Supervisor"
-                  data={supervisors}
-                  handleChange={
-                     handleSupervisorChange
-                  }
-               />
-            </FormControl>
-            {/* Foreman */}
-            <FormControl
-               sx={{
-                  marginLeft: {
-                     sm: ".5rem"
-                  },
-                  width: {
-                     xs: "100%",
-                     sm: "50%"
-                  },
-                  marginBottom: {
-                     xs: ".75rem"
-                  }
-               }}
-               required
-            >
-               <SelectInput
-                  name="Foreman"
-                  data={foremen}
-                  handleChange={
-                     handleForemanChange
-                  }
-               />
-            </FormControl>
-         </Container>
-         {/* 3rd Row | Project Description*/}
-         <Container className="p-0 flex">
-            <FormControl fullWidth>
-               <TextField
-                  id="outlined-multiline-flexible"
-                  label="Description of work to be performed:"
-                  multiline
-                  rows={4}
-                  required
-                  onChange={
-                     handleTaskDescriptionChange
-                  }
-               />
-            </FormControl>
-         </Container>
-         {/* Navigation */}
-         <Box
-            display="flex"
-            justifyContent="center"
-         >
+         {/* Tasks are created based on their project id */}
+         {view === "task" ? (
+            <Task projectId={projectId} handleTaskAdd={handleTaskAdd} />
+         ) : null}
+         {/* Shifts are created based on their task id */}
+         {view === "shift" ? (
+            <Shift taskId={taskId} handleShiftAdd={handleShiftAdd} />
+         ) : null}
+         {/* Navigation - Back to Home Screen | Save Data -> Next Page */}
+         <Box display="flex" justifyContent="space-evenly">
             <Button variant="standard">
-               <Link href="/">Home</Link>
+               <Link href="/" style={{ textDecoration: "none" }}>
+                  Back
+               </Link>
             </Button>
-            {dataReady && shiftId ? (
-               <Container>
-                  {" "}
-                  <Button variant="standard">
-                     <Link
-                        href={{
-                           pathname:
-                              "../page-two",
-                           query: {
-                              id: shiftId
-                           }
-                        }}
-                     >
-                        Next
-                     </Link>
-                  </Button>
-               </Container>
-            ) : (
-               <Button
-                  variant="standard"
-                  onClick={handleTaskAdd}
+            <Button variant="standard">
+               <Link
+                  href={{
+                     pathname: dataReady ? "../page-two" : null,
+                     // query: {
+                     //    // id: shiftId
+                     // }
+                  }}
+                  style={{ textDecoration: "none" }}
                >
-                  Save
-               </Button>
-            )}
+                  Next
+               </Link>
+            </Button>
          </Box>
-      </section>
-   )
+      </Container>
+      </>
+   );
 }

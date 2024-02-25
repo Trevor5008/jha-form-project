@@ -10,6 +10,5 @@ export async function GET() {
             Tasks: []
         }
     })
-    
     return NextResponse.json({ project })
 }

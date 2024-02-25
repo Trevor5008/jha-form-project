@@ -2,6 +2,7 @@ import { createTheme } from "@mui/material/styles"
 
 export const theme = createTheme({
    typography: {
+      fontSize: 15,
       h1: {
          fontSize: 30,
          lineHeight: '45px',
@@ -11,19 +12,25 @@ export const theme = createTheme({
          }
       },
       h2: {
-         fontSize: 20,
+         fontSize: 26,
          '@media (minWidth: 750px)': {
             fontSize: 30
          }
       },
       h3: {
-         fontSize: 16,
+         fontSize: 20,
          '@media (minWidth: 750px)': {
             fontSize: 20
          }
       },
       h4: {
-        fontSize: 14
+        fontSize: 16
+      },
+      h5: {
+         fontSize: 14
+      },
+      body1: {
+         fontSize: 12
       },
       body2: {
          fontSize: 10

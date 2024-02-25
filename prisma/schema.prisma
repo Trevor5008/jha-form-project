@@ -21,6 +21,7 @@ model Project {
 model Task {
   id                Int           @id @default(autoincrement())
   name              String 
+  supervisor        String
   project           Project       @relation(fields: [projectId], references: [id])
   projectId         Int
   Shifts            Shift[]
@@ -28,6 +29,7 @@ model Task {
 
 model Shift {
   id                Int           @id @default(autoincrement())
+  foreman           String
   startDateTime     DateTime      
   endDateTime       DateTime?       
   description       String
