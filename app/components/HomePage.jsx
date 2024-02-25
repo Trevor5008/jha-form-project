@@ -15,9 +15,12 @@ import {
    ListSubheader,
 } from "@mui/material";
 import Link from "next/link";
+import { formatShiftDate } from "@/lib/utils";
 
 export default function HomePage() {
+   // Project includes all task and shift data as well
    const [project, setProject] = useState(null);
+   // Flag for preventing incomplete data load
    const [dataReady, setDataReady] = useState(false);
 
    useEffect(() => {
@@ -30,10 +33,11 @@ export default function HomePage() {
          .then((res) => setProject(res.project))
          .then(() => setDataReady(true));
    }
-   // TODO: Change to single project, header s/b project name
+   
    return dataReady && project ? (
       <Container>
          <Box key={project?.id}>
+            {/* Project Title - "UT Brain & Health" */}
             <Typography
                variant="h1"
                sx={{
@@ -66,6 +70,29 @@ export default function HomePage() {
                         >
                            <Typography variant="h5">{task.name}</Typography>
                         </Link>
+                        {task?.Shifts ? task.Shifts.map((shift, idx) => {
+                           const shiftTitle = formatShiftDate(shift.startDateTime)
+                           return (
+                              <Box key={idx} marginLeft={2} marginY={1}>
+                                 <Link
+                                    style={{
+                                       textDecoration: "none",
+                                    }}
+                                    sx={{
+                                       cursor: "pointer",
+                                    }}
+                                    href={{
+                                       pathname: "../page-two",
+                                       query: {
+                                          id: shift.id,
+                                       },
+                                    }}
+                                 >
+                                    <Typography variant="h5">{shiftTitle}</Typography>
+                                 </Link>
+                              </Box>
+                           )}) : null
+                        }
                         {/* New Shift Button */}
                         <Box marginLeft={1} marginTop={1}>
                            <Button variant="outlined" size="medium">
@@ -86,32 +113,16 @@ export default function HomePage() {
                               </Link>
                            </Button>
                         </Box>
-                        {/* Template has no shift id */}
-                        {/* <Button variant="outlined">
-                                    <Link
-                                       style={{
-                                          textDecoration: "none",
-                                          fontSize: 12
-                                       }}
-                                       sx={{
-                                          cursor: "pointer",
-                                       }}
-                                       href={{
-                                          pathname: "../page-two",
-                                       }}
-                                    >
-                                       Create Template
-                                    </Link>
-                                 </Button> */}
                      </Box>
                   );
                })}
             </Box>
             {/* Submitted JHAs (Awaiting GC Safety Team approval) */}
             <Box marginLeft={2} marginTop={1} marginBottom={2}>
+               {/* Heading */}
                <Typography variant="h4">Submitted JHAs</Typography>
                <Typography variant="body2" marginTop={.5}>* Awaiting GC Safety Team approval</Typography>
-               {project.Tasks.map((task, idx) => {
+               {project?.Tasks.map((task, idx) => {
                   return (
                      <Box key={idx} marginLeft={2} marginY={1}>
                         <Link
@@ -125,25 +136,11 @@ export default function HomePage() {
                               },
                            }}
                         >
+                           {/* Task Heading */}
                            <Typography variant="h5">{task.name}</Typography>
+                           {/* {project.Tasks.Shifts} */}
                         </Link>
-                        {/* Template has no shift id */}
-                        {/* <Button variant="outlined">
-                                    <Link
-                                       style={{
-                                          textDecoration: "none",
-                                          fontSize: 12
-                                       }}
-                                       sx={{
-                                          cursor: "pointer",
-                                       }}
-                                       href={{
-                                          pathname: "../page-two",
-                                       }}
-                                    >
-                                       Create Template
-                                    </Link>
-                                 </Button> */}
+
                      </Box>
                   );
                })}

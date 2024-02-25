@@ -22,8 +22,6 @@ export default function PageOne() {
    const [view, setView] = useState(null);
    const [projectId, setProjectId] = useState(null);
    const [taskId, setTaskId] = useState(null);
-   const [supervisor, setSupervisor] = useState(null);
-   const [foreman, setForeman] = useState(null)
    // Flag for rendering form if options loaded
    const [dataReady, setDataReady] = useState(false);
 
@@ -67,8 +65,8 @@ export default function PageOne() {
       //    // .then((res) => setShiftId(res.shiftId))
       //    .then(() => setDataReady(true))
    }
+
    async function handleShiftAdd(foreman, startDateTime) {
-      setDataReady(true)
       await fetch("../../api/add-shift/" + taskId, {
          method: "POST",
          headers: {
@@ -80,6 +78,7 @@ export default function PageOne() {
          }),
       }).then(() => setDataReady(true));
    }
+   
    return (
       <>
       <Header/>

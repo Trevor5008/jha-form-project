@@ -11,6 +11,7 @@ import {
 import SelectInput from "./SelectInput";
 import DateTimeInput from "./DateTimeInput";
 import { foremenData } from "@/lib/options";
+import { formatShiftDate } from "@/lib/utils";
 import Link from "next/link";
 
 export default function Shift({ taskId, handleShiftAdd }) {
@@ -55,7 +56,7 @@ export default function Shift({ taskId, handleShiftAdd }) {
                marginTop: 2
             }}
          >
-            {/* Personnel Select */}
+            {/* Foreman Select */}
             <FormControl
                sx={{
                   marginLeft: {
