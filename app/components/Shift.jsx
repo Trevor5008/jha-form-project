@@ -18,13 +18,12 @@ export default function Shift({ taskId, handleShiftAdd }) {
    const [foremen, setForemen] = useState([]);
    const [foremanName, setForemanName] = useState("");
    const [startDateTime, setStartDateTime] = useState(null);
-   const [shiftId, setShiftId] = useState(null);
    const [dataReady, setDataReady] = useState(true);
 
    useEffect(() => {
       loadForemen();
       if (foremen) setDataReady(true);
-   }, [foremen, taskId, shiftId]);
+   }, [foremen, taskId]);
 
    // TODO: Load foreman from db instead of json
    async function loadForemen() {

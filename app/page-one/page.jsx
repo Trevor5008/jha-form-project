@@ -22,6 +22,7 @@ export default function PageOne() {
    const [view, setView] = useState(null);
    const [projectId, setProjectId] = useState(null);
    const [taskId, setTaskId] = useState(null);
+   const [shiftId, setShiftId] = useState(null);
    // Flag for rendering form if options loaded
    const [dataReady, setDataReady] = useState(false);
 
@@ -76,9 +77,10 @@ export default function PageOne() {
             foreman,
             startDateTime,
          }),
-      }).then(() => setDataReady(true));
+      }).then((res) => res.json())
+      .then(() => setDataReady(true))
    }
-   
+
    return (
       <>
       <Header/>
@@ -121,7 +123,7 @@ export default function PageOne() {
                   href={{
                      pathname: dataReady ? "../page-two" : null,
                      // query: {
-                     //    // id: shiftId
+                     //    shiftId
                      // }
                   }}
                   style={{ textDecoration: "none" }}

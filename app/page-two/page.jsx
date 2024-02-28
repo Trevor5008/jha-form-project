@@ -20,12 +20,13 @@ import CheckBoxOutlineBlankOutlinedIcon from "@mui/icons-material/CheckBoxOutlin
 
 export default function PageTwo() {
    const searchParams = useSearchParams();
-   const shiftId = searchParams.get("id");
+   const shiftId = searchParams.get("shiftId");
    const [permits, setPermits] = useState(null);
    const [permitMisc, setPermitMisc] = useState(null);
    const [atmMonitoring, setAtmMonitoring] = useState(null);
    const [dataReady, setDataReady] = useState(false);
 
+   // Loads permit, atmospheric monitoring options (defaulted to 'No' each)
    useEffect(() => {
       fetch("../api/get-page2-options/" + shiftId)
          .then((res) => {
@@ -66,9 +67,10 @@ export default function PageTwo() {
    function changePermitMisc(evt) {
       setPermitMisc(evt.target.value);
    }
+   // Handle updates to all option selections
    function handleNext() {
       {
-         fetch("../api/update-page2-options/" + searchParams.get("id"), {
+         fetch("../api/update-page2-options/" + shiftId, {
             method: "PATCH",
             headers: {
                "Content-Type": "application/json",
@@ -81,6 +83,7 @@ export default function PageTwo() {
          });
       }
    }
+
    return (
       <Container>
          {/* Permits */}
@@ -269,12 +272,13 @@ export default function PageTwo() {
                                  onChange={(e) =>
                                     handleAtmMonitorChange(idx, e.target.value)
                                  }
-                                 value={opt.shiftCategoryOptions[0].checked}
+                                 value={opt.shiftCategoryOptions[0]?.checked}
                                  sx={{
                                     display: "inline-block",
                                     marginLeft: 1,
                                  }}
                               >
+                                 {/* 'Yes' option */}
                                  <FormControlLabel
                                     value={true}
                                     control={
@@ -304,6 +308,7 @@ export default function PageTwo() {
                                        },
                                     }}
                                  />
+                                 {/* 'No' option */}
                                  <FormControlLabel
                                     value={false}
                                     control={
@@ -356,7 +361,7 @@ export default function PageTwo() {
                <Link
                   href={{
                      pathname: "../page-three",
-                     query: { id: shiftId },
+                     query: { shiftId },
                   }}
                   onClick={handleNext}
                >

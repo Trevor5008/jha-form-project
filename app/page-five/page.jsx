@@ -18,7 +18,7 @@ import Link from "next/link"
 
 export default function PageFive() {
    const searchParams = useSearchParams()
-   const shiftId = searchParams.get("id")
+   const shiftId = searchParams.get("shiftId")
    const [hazardControls, setHazardControls] = useState(null)
    const [dataReady, setDataReady] =
       useState(false)
@@ -33,7 +33,7 @@ export default function PageFive() {
             //   )
          })
          .then(() => setDataReady(true))
-   }, [])
+   }, [shiftId])
 
    function handleHazardControlChange(idx, isChecked) {
       const val = isChecked === "true"
@@ -50,7 +50,7 @@ export default function PageFive() {
     {
        fetch(
           "../api/update-page5-options/" +
-             searchParams.get("id"),
+             shiftId,
           {
              method: "PATCH",
              headers: {
@@ -94,7 +94,7 @@ export default function PageFive() {
                {dataReady
                   ? hazardControls.map((opt, idx) => {
                        return (
-                          <Box display="flex">
+                          <Box display="flex" key={idx}>
                              <FormControl
                                 className="mb-2 flex flex-nowrap items-center justify-between"
                                 fullWidth
@@ -236,7 +236,7 @@ export default function PageFive() {
                <Link
                   href={{
                      pathname: "../page-four",
-                     query: { id: shiftId }
+                     query: { shiftId }
                   }}
                   onClick={handleNext}
                >
@@ -247,7 +247,7 @@ export default function PageFive() {
                <Link
                   href={{
                      pathname: "../page-six",
-                     query: { id: shiftId }
+                     query: { shiftId }
                   }}
                   onClick={handleNext}
                >

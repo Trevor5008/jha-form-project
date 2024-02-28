@@ -61,12 +61,13 @@ export default function HomePage() {
                            sx={{
                               cursor: "pointer",
                            }}
-                           href={{
-                              pathname: "../page-two",
-                              query: {
-                                 id: task.id,
-                              },
-                           }}
+                           href="#"
+                           // href={{
+                           //    pathname: "../page-two",
+                           //    query: {
+                           //       id: task.id,
+                           //    },
+                           // }}
                         >
                            <Typography variant="h5">{task.name}</Typography>
                         </Link>
@@ -84,7 +85,7 @@ export default function HomePage() {
                                     href={{
                                        pathname: "../page-two",
                                        query: {
-                                          id: shift.id,
+                                          shiftId: shift.id,
                                        },
                                     }}
                                  >
@@ -129,12 +130,13 @@ export default function HomePage() {
                            style={{
                               textDecoration: "none"
                            }}
-                           href={{
-                              pathname: "../page-two",
-                              query: {
-                                 id: task.id,
-                              },
-                           }}
+                           href="#"
+                           // href={{
+                           //    pathname: "../page-two",
+                           //    query: {
+                           //       id: task.id,
+                           //    },
+                           // }}
                         >
                            {/* Task Heading */}
                            <Typography variant="h5">{task.name}</Typography>
@@ -155,12 +157,13 @@ export default function HomePage() {
                            style={{
                               textDecoration: "none"
                            }}
-                           href={{
-                              pathname: "../page-two",
-                              query: {
-                                 id: task.id,
-                              },
-                           }}
+                           href="#"
+                           // href={{
+                           //    pathname: "../page-two",
+                           //    query: {
+                           //       id: task.id,
+                           //    },
+                           // }}
                         >
                            <Typography variant="h5">{task.name}</Typography>
                         </Link>

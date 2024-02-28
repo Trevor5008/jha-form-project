@@ -7,7 +7,6 @@ export async function POST(request, { params }) {
    const data = JSON.parse(rawBody)
    const taskId = Number(params['taskId'])
    const { foreman, startDateTime } = data
-   console.log(foreman, startDateTime)
 
    const shift = await prisma.shift.create({
       data: {
@@ -21,7 +20,7 @@ export async function POST(request, { params }) {
    for (let opt of catOptions) {
       await prisma.shiftCategoryOption.create({
          data: {
-            taskId,
+            shiftId: shift.id,
             categoryId: opt.categoryId,
             categoryOptionId: opt.id,
             checked: false,

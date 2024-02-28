@@ -5,7 +5,7 @@ import { NextResponse } from "next/server"
 export async function PATCH(request, { params }) {
    const rawBody = await request.text()
    const data = JSON.parse(rawBody)
-   const shiftId = Number(params.id)
+   const shiftId = Number(params.shiftId)
 
    // Situations
    // get situations category id

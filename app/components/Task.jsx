@@ -16,13 +16,12 @@ export default function Task({ projectId, handleTaskAdd }) {
    const [supers, setSupers] = useState([]);
    const [supervisorName, setSupervisorName] = useState(null);
    const [taskDescription, setTaskDescription] = useState(null);
-   const [taskId, setTaskId] = useState(null);
    const [dataReady, setDataReady] = useState(false);
 
    useEffect(() => {
       loadSupervisors();
       if (supers) setDataReady(true);
-   }, [supers, projectId, taskId]);
+   }, [supers, projectId]);
 
    // TODO: Transition from json data to db lookup
    async function loadSupervisors() {

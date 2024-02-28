@@ -18,7 +18,7 @@ import Link from "next/link"
 
 export default function PageThree() {
    const searchParams = useSearchParams()
-   const shiftId = searchParams.get("id")
+   const shiftId = searchParams.get("shiftId")
    const [situations, setSituations] =
       useState(null)
    const [situationsMisc, setSituationsMisc] =
@@ -29,7 +29,7 @@ export default function PageThree() {
    useEffect(() => {
       fetch(
          "../api/get-page3-options/" +
-            searchParams.get("id")
+            shiftId
       )
          .then((res) => res.json())
          .then((res) => {
@@ -62,7 +62,7 @@ export default function PageThree() {
       {
          fetch(
             "../api/update-page3-options/" +
-               searchParams.get("id"),
+               shiftId,
             {
                method: "PATCH",
                headers: {
@@ -283,7 +283,7 @@ export default function PageThree() {
                <Link
                   href={{
                      pathname: "../page-two",
-                     query: { id: shiftId }
+                     query: { shiftId }
                   }}
                   onClick={handleNext}
                >
@@ -294,7 +294,7 @@ export default function PageThree() {
                <Link
                   href={{
                      pathname: "../page-four",
-                     query: { id: shiftId }
+                     query: { shiftId }
                   }}
                   onClick={handleNext}
                >

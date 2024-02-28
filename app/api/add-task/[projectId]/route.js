@@ -8,7 +8,6 @@ export async function POST(request, { params }) {
    const data = JSON.parse(rawBody);
    const projectId = Number(params["projectId"]);
    const { supervisor, task } = data
-   console.log(supervisor, task)
 
    await prisma.task.create({
       data: {
