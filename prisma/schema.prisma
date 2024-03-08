@@ -29,6 +29,7 @@ model Task {
 
 model Shift {
   id                Int           @id @default(autoincrement())
+  status            String
   foreman           String
   startDateTime     DateTime      
   endDateTime       DateTime?       

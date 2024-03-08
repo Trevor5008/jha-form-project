@@ -12,7 +12,8 @@ export async function POST(request, { params }) {
       data: {
          taskId,
          foreman,
-         startDateTime    
+         startDateTime,
+         status: 'in-progress'   
       }
    })
    
