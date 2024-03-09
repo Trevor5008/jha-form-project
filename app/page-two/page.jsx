@@ -204,9 +204,10 @@ export default function PageTwo() {
                        })
                      : null}
                </Box>
+               {/* Dynamically generated "other" permit fields */}
                <TextField
                   label="Other"
-                  // variant="standard"
+                  variant="outlined"
                   fullWidth
                   value={permitMisc || ""}
                   sx={{
