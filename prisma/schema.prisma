@@ -29,10 +29,10 @@ model Task {
 
 model Shift {
   id                Int           @id @default(autoincrement())
+  status            String
   foreman           String
   startDateTime     DateTime      
   endDateTime       DateTime?       
-  description       String
   permits           Permit[]
   task           Task       @relation(fields: [taskId], references: [id])
   taskId         Int

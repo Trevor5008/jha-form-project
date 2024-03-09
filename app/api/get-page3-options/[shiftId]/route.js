@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client"
 import { NextResponse } from "next/server"
 
 export async function GET(request, { params }) {
-    const shiftId = Number(params['id'])
+    const shiftId = Number(params['shiftId'])
 
     // Situations Category Id
     const { id: situationsId } = await prisma.category.findFirst({

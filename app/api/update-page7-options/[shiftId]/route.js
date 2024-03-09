@@ -4,7 +4,7 @@ const prisma = new PrismaClient()
 export async function PATCH(request, { params }) {
    const rawBody = await request.text()
    const data = JSON.parse(rawBody)
-   const shiftId = Number(params.id)
+   const shiftId = Number(params.shiftId)
 
    // Situations ID
    const { id: situationsId } = await prisma.category.findFirst({
@@ -86,7 +86,6 @@ export async function PATCH(request, { params }) {
 
    // Update each option w/ details provided
    for (let ctrl of data.hazardControls) {
-      console.log(`Hazard Control Item: ${ctrl}`)
       const { id: hazardCtrlId } =
          await prisma.categoryOption.findFirst({
             where: {
@@ -122,7 +121,6 @@ export async function PATCH(request, { params }) {
 
    // Update each option w/ details provided
    for (let item of data.ppe) {
-      console.log(`PPE Item: ${item}`)
       const { id: itemId } =
          await prisma.categoryOption.findFirst({
             where: {

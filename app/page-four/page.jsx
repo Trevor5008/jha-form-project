@@ -19,7 +19,7 @@ import Link from "next/link"
 
 export default function PageFour() {
    const searchParams = useSearchParams()
-   const shiftId = searchParams.get("id")
+   const shiftId = searchParams.get("shiftId")
    const [hazards, setHazards] = useState(null)
    const [dataReady, setDataReady] =
       useState(false)
@@ -46,12 +46,12 @@ export default function PageFour() {
          return updatedOpts
       })
    }
-
+   // Updates page-four options route
    function handleNext() {
     {
        fetch(
           "../api/update-page4-options/" +
-             searchParams.get("id"),
+             shiftId,
           {
              method: "PATCH",
              headers: {
@@ -237,7 +237,7 @@ export default function PageFour() {
                <Link
                   href={{
                      pathname: "../page-three",
-                     query: { id: shiftId }
+                     query: { shiftId }
                   }}
                   onClick={handleNext}
                >
@@ -248,7 +248,7 @@ export default function PageFour() {
                <Link
                   href={{
                      pathname: "../page-five",
-                     query: { id: shiftId }
+                     query: { shiftId }
                   }}
                   onClick={handleNext}
                >

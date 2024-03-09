@@ -18,7 +18,7 @@ import Link from "next/link"
 
 export default function PageFive() {
    const searchParams = useSearchParams()
-   const shiftId = searchParams.get("id")
+   const shiftId = searchParams.get("shiftId")
    const [ppe, setPpe] = useState(null)
    const [dataReady, setDataReady] =
       useState(false)
@@ -50,7 +50,7 @@ export default function PageFive() {
     {
        fetch(
           "../api/update-page6-options/" +
-             searchParams.get("id"),
+             shiftId,
           {
              method: "PATCH",
              headers: {
@@ -235,7 +235,7 @@ export default function PageFive() {
                <Link
                   href={{
                      pathname: "../page-five",
-                     query: { id: shiftId }
+                     query: { shiftId }
                   }}
                   onClick={handleNext}
                >
@@ -246,7 +246,7 @@ export default function PageFive() {
                <Link
                   href={{
                      pathname: "../page-seven",
-                     query: { id: shiftId }
+                     query: { shiftId }
                   }}
                   onClick={handleNext}
                >

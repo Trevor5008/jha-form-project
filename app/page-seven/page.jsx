@@ -18,7 +18,7 @@ import Link from "next/link";
 
 export default function PageSeven() {
    const searchParams = useSearchParams();
-   const shiftId = searchParams.get("id");
+   const shiftId = searchParams.get("shiftId");
    const [situations, setSituations] = useState(null);
    const [hazards, setHazards] = useState(null);
    const [hazardControls, setHazardControls] = useState(null);
@@ -263,7 +263,7 @@ export default function PageSeven() {
                <Link
                   href={{
                      pathname: "../page-six",
-                     query: { id: shiftId },
+                     query: { shiftId },
                   }}
                   onClick={handleNext}
                >
@@ -274,7 +274,7 @@ export default function PageSeven() {
                <Link
                   href={{
                      pathname: "../page-seven",
-                     query: { id: shiftId },
+                     query: { shiftId },
                   }}
                   onClick={handleNext}
                >

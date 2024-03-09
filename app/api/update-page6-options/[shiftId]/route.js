@@ -4,14 +4,14 @@ import { PrismaClient } from "@prisma/client"
 export async function PATCH(request, { params }) {
    const rawBody = await request.text()
    const data = JSON.parse(rawBody)
-   const shiftId = Number(params.id)
+   const shiftId = Number(params.shiftId)
 
-   // Hazards
-   // get hazards category id
-   const { id: hazardControlsId } =
+   // PPE
+    // Get PPE category ID
+   const { id: ppeId } =
       await prisma.category.findFirst({
          where: {
-            name: "hazard controls"
+            name: "ppe"
          },
          select: { id: true }
       })
@@ -44,12 +44,12 @@ export async function PATCH(request, { params }) {
    //       })
    //    }
    // Iterate over each option and update 'checked' value
-   for (let control of data.hazardControls) {
-      const { id: hazardControlId } =
+   for (let control of data.ppe) {
+      const { id: ppeControlId } =
          await prisma.categoryOption.findFirst({
             where: {
                name: control.name,
-               categoryId: hazardControlsId
+               categoryId: ppeId
             },
             select: {
                id: true
@@ -60,8 +60,8 @@ export async function PATCH(request, { params }) {
          where: {
             shiftId_categoryId_categoryOptionId: {
                shiftId,
-               categoryId: hazardControlsId,
-               categoryOptionId: hazardControlId
+               categoryId: ppeId,
+               categoryOptionId: ppeControlId
             }
          },
          data: {

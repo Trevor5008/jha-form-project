@@ -3,19 +3,19 @@ import { PrismaClient } from "@prisma/client"
 import { NextResponse } from "next/server"
 
 export async function GET(request, { params }) {
-    const shiftId = Number(params['id'])
+    const shiftId = Number(params['shiftId'])
 
     // Hazards Category Id
-    const { id: hazardsId } = await prisma.category.findFirst({
+    const { id: ppeId } = await prisma.category.findFirst({
         where: {
-            name: "hazards"
+            name: "ppe"
         },
         select: { id: true }
     })
 
     // Hazards Category Options
-    const hazardOpts = await prisma.categoryOption.findMany({
-        where: { categoryId: hazardsId },
+    const ppeOpts = await prisma.categoryOption.findMany({
+        where: { categoryId: ppeId },
         select: {
             name: true,
             shiftCategoryOptions: {
@@ -25,5 +25,5 @@ export async function GET(request, { params }) {
         }
     })
 
-    return NextResponse.json({ hazardOpts })
+    return NextResponse.json({ ppeOpts })
 }

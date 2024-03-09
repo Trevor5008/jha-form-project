@@ -5,23 +5,25 @@ import { NextResponse } from "next/server"
 export async function POST(request, { params }) {
    const rawBody = await request.text()
    const data = JSON.parse(rawBody)
-   const projectId = Number(params['projectId'])
+   const taskId = Number(params['taskId'])
+   const { foreman, startDateTime } = data
 
    const shift = await prisma.shift.create({
       data: {
-         projectId,
-         startDateTime: data.shiftDateTime,
-         description: data.taskDescription     
+         taskId,
+         foreman,
+         startDateTime,
+         status: 'in-progress'   
       }
    })
    
-   const categoryOptions = await prisma.categoryOption.findMany({})
-   for (let option of categoryOptions) {
+   const catOptions = await prisma.categoryOption.findMany({})
+   for (let opt of catOptions) {
       await prisma.shiftCategoryOption.create({
          data: {
             shiftId: shift.id,
-            categoryId: option.categoryId,
-            categoryOptionId: option.id,
+            categoryId: opt.categoryId,
+            categoryOptionId: opt.id,
             checked: false,
             details: ''
          }
