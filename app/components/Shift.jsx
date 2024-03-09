@@ -19,6 +19,7 @@ export default function Shift({ taskId, handleShiftAdd }) {
    const [foremanName, setForemanName] = useState("");
    const [startDateTime, setStartDateTime] = useState(null);
    const [dataReady, setDataReady] = useState(true);
+   const [isSubmitted, setIsSubmitted] = useState(false);
 
    useEffect(() => {
       loadForemen();
@@ -52,7 +53,7 @@ export default function Shift({ taskId, handleShiftAdd }) {
                   xs: "column",
                   sm: "row",
                },
-               marginTop: 2
+               marginTop: 2,
             }}
          >
             {/* Foreman Select */}
@@ -64,7 +65,7 @@ export default function Shift({ taskId, handleShiftAdd }) {
                   width: {
                      xs: "100%",
                      sm: "50%",
-                  }
+                  },
                }}
                required
             >
@@ -108,7 +109,10 @@ export default function Shift({ taskId, handleShiftAdd }) {
          <Box display="flex" justifyContent="center">
             <Button
                variant="standard"
-               onClick={() => handleShiftAdd(foremanName, startDateTime)}
+               onClick={() => {
+                  setIsSubmitted(true);
+                  handleShiftAdd(foremanName, startDateTime);
+               }}
                disabled={!foremanName || !startDateTime}
             >
                Save

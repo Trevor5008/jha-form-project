@@ -17,6 +17,7 @@ export default function Task({ projectId, handleTaskAdd }) {
    const [supervisorName, setSupervisorName] = useState(null);
    const [taskDescription, setTaskDescription] = useState(null);
    const [dataReady, setDataReady] = useState(false);
+   const [isSubmitted, setIsSubmitted] = useState(false);
 
    useEffect(() => {
       loadSupervisors();
@@ -51,7 +52,7 @@ export default function Task({ projectId, handleTaskAdd }) {
                   xs: "column",
                   sm: "row",
                },
-               marginTop: 2
+               marginTop: 2,
             }}
          >
             {/* Supervisor */}
@@ -84,11 +85,11 @@ export default function Task({ projectId, handleTaskAdd }) {
                   value={taskDescription}
                   sx={{
                      "& .MuiFormLabel-root": {
-                        fontSize: "15px"
+                        fontSize: "15px",
                      },
                      "& .MuiInputBase-root span": {
-                        fontSize: "12px"
-                     }
+                        fontSize: "12px",
+                     },
                   }}
                />
             </FormControl>
@@ -97,8 +98,11 @@ export default function Task({ projectId, handleTaskAdd }) {
          <Box display="flex" justifyContent="center">
             <Button
                variant="standard"
-               onClick={() => handleTaskAdd(supervisorName, taskDescription)}
-               disabled={!supervisorName || !taskDescription}
+               onClick={() => {
+                  setIsSubmitted(true);
+                  handleTaskAdd(supervisorName, taskDescription);
+               }}
+               disabled={!supervisorName || !taskDescription || isSubmitted}
             >
                Save
             </Button>

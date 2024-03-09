@@ -33,7 +33,7 @@ export default function HomePage() {
          .then((res) => setProject(res.project))
          .then(() => setDataReady(true));
    }
-   
+
    return dataReady && project ? (
       <Container>
          <Box key={project?.id}>
@@ -54,46 +54,36 @@ export default function HomePage() {
                {project.Tasks.map((task, idx) => {
                   return (
                      <Box key={idx} marginLeft={2} marginY={1}>
-                        <Link
-                           style={{
-                              textDecoration: "none",
-                           }}
-                           sx={{
-                              cursor: "pointer",
-                           }}
-                           href="#"
-                           // href={{
-                           //    pathname: "../page-two",
-                           //    query: {
-                           //       id: task.id,
-                           //    },
-                           // }}
-                        >
-                           <Typography variant="h5">{task.name}</Typography>
-                        </Link>
-                        {task?.Shifts ? task.Shifts.map((shift, idx) => {
-                           const shiftTitle = formatShiftDate(shift.startDateTime)
-                           return (
-                              <Box key={idx} marginLeft={2} marginY={1}>
-                                 <Link
-                                    style={{
-                                       textDecoration: "none",
-                                    }}
-                                    sx={{
-                                       cursor: "pointer",
-                                    }}
-                                    href={{
-                                       pathname: "../page-two",
-                                       query: {
-                                          shiftId: shift.id,
-                                       },
-                                    }}
-                                 >
-                                    <Typography variant="h5">{shiftTitle}</Typography>
-                                 </Link>
-                              </Box>
-                           )}) : null
-                        }
+                        <Typography variant="h5">{task.name}</Typography>
+                        {task?.Shifts
+                           ? task.Shifts.map((shift, idx) => {
+                                const shiftTitle = formatShiftDate(
+                                   shift.startDateTime
+                                );
+                                return (
+                                   <Box key={idx} marginLeft={2} marginY={1}>
+                                      <Link
+                                         style={{
+                                            textDecoration: "none",
+                                         }}
+                                         sx={{
+                                            cursor: "pointer",
+                                         }}
+                                         href={{
+                                            pathname: "../page-two",
+                                            query: {
+                                               shiftId: shift.id,
+                                            },
+                                         }}
+                                      >
+                                         <Typography variant="h5">
+                                            {shiftTitle}
+                                         </Typography>
+                                      </Link>
+                                   </Box>
+                                );
+                             })
+                           : null}
                         {/* New Shift Button */}
                         <Box marginLeft={1} marginTop={1}>
                            <Button variant="outlined" size="medium">
@@ -122,27 +112,13 @@ export default function HomePage() {
             <Box marginLeft={2} marginTop={1} marginBottom={2}>
                {/* Heading */}
                <Typography variant="h4">Submitted JHAs</Typography>
-               <Typography variant="body2" marginTop={.5}>* Awaiting GC Safety Team approval</Typography>
+               <Typography variant="body2" marginTop={0.5}>
+                  * Awaiting GC Safety Team approval
+               </Typography>
                {project?.Tasks.map((task, idx) => {
                   return (
                      <Box key={idx} marginLeft={2} marginY={1}>
-                        <Link
-                           style={{
-                              textDecoration: "none"
-                           }}
-                           href="#"
-                           // href={{
-                           //    pathname: "../page-two",
-                           //    query: {
-                           //       id: task.id,
-                           //    },
-                           // }}
-                        >
-                           {/* Task Heading */}
-                           <Typography variant="h5">{task.name}</Typography>
-                           {/* {project.Tasks.Shifts} */}
-                        </Link>
-
+                        <Typography variant="h5">{task.name}</Typography>
                      </Box>
                   );
                })}
@@ -153,20 +129,7 @@ export default function HomePage() {
                {project.Tasks.map((task, idx) => {
                   return (
                      <Box key={idx} marginLeft={2} marginY={1}>
-                        <Link
-                           style={{
-                              textDecoration: "none"
-                           }}
-                           href="#"
-                           // href={{
-                           //    pathname: "../page-two",
-                           //    query: {
-                           //       id: task.id,
-                           //    },
-                           // }}
-                        >
-                           <Typography variant="h5">{task.name}</Typography>
-                        </Link>
+                        <Typography variant="h5">{task.name}</Typography>
                      </Box>
                   );
                })}
