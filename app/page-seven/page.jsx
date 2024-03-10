@@ -262,7 +262,7 @@ export default function PageSeven() {
             <Button variant="standard">
                <Link
                   href={{
-                     pathname: "../page-seven",
+                     pathname: "../page-six",
                      query: { shiftId },
                   }}
                   onClick={handleNext}

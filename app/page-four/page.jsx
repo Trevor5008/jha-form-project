@@ -256,6 +256,11 @@ export default function PageFour() {
                </Link>
             </Button>
          </Box>
+         <Box display="flex" justifyContent="center">
+            <Button variant="standard">
+               <Link href="/" onClick={handleNext}>Home</Link>
+            </Button>
+         </Box>
       </Container>
    )
 }

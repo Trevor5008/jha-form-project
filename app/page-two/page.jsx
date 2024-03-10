@@ -44,7 +44,7 @@ export default function PageTwo() {
          .catch((error) => {
             console.error("Error fetching data:", error);
          });
-   }, [searchParams, shiftId]); 
+   }, [searchParams, shiftId]);
 
    function handlePermitChange(idx, isChecked) {
       const val = isChecked === "true";
@@ -356,7 +356,9 @@ export default function PageTwo() {
          {/* Navigation Buttons */}
          <Box display="flex" justifyContent="space-evenly">
             <Button variant="standard">
-               <Link href="/">Home</Link>
+               <Link href="/" onClick={handleNext}>
+                  Back to Home
+               </Link>
             </Button>
             <Button variant="standard">
                <Link
