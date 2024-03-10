@@ -35,14 +35,22 @@ export default function PageFive() {
 
    useEffect(() => {
       fetch("../api/get-page5-options/" + shiftId)
-         .then((res) => res.json())
+         .then((res) => {
+            if (!res.ok) {
+               throw new Error("Network response was not ok")
+            }
+            return res.json()
+         })
          .then((res) => {
             setHazardControls(res.hazardControlOpts);
             //   setSituationsMisc(
             //      res.situationsMisc?.details
             //   )
          })
-         .then(() => setDataReady(true));
+         .then(() => setDataReady(true))
+         .catch((error) => {
+            console.error("Error fetching data:", error);
+         });
    }, [shiftId]);
 
    function handleStandByAdd(evt) {

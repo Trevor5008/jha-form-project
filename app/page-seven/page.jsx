@@ -262,7 +262,7 @@ export default function PageSeven() {
             <Button variant="standard">
                <Link
                   href={{
-                     pathname: "../page-six",
+                     pathname: "../page-seven",
                      query: { shiftId },
                   }}
                   onClick={handleNext}
@@ -273,7 +273,7 @@ export default function PageSeven() {
             <Button variant="standard">
                <Link
                   href={{
-                     pathname: "../page-seven",
+                     pathname: "../pg-8",
                      query: { shiftId },
                   }}
                   onClick={handleNext}
