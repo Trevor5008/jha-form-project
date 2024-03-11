@@ -17,6 +17,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import CheckIcon from "@mui/icons-material/Check";
 import CheckBoxOutlineBlankOutlinedIcon from "@mui/icons-material/CheckBoxOutlineBlankOutlined";
+import Header from "../components/Header";
 
 export default function PageTwo() {
    const searchParams = useSearchParams();
@@ -86,8 +87,9 @@ export default function PageTwo() {
 
    return (
       <Container>
+         <Header/>
          {/* Permits */}
-         <Container>
+         <Container sx={{ marginTop: 3 }}>
             <Typography variant="h3" marginBottom={1}>
                <span>A.</span> Are Permits Required? Are they displayed and
                properly signed by the PSC/PSA?
@@ -227,7 +229,7 @@ export default function PageTwo() {
             </Box>
          </Container>
          {/* Atmospheric Monitoring */}
-         <Container>
+         <Container sx={{ marginTop: 3 }}>
             {/* Heading */}
             <Typography variant="h3" marginBottom={1}>
                <span style={{ fontWeight: "bold" }}>B.</span> Atmospheric
