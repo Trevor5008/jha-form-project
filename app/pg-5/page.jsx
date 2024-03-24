@@ -16,7 +16,7 @@ import {
    Typography,
    MenuItem,
    Select,
-   Pagination
+   Pagination,
 } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import CheckBoxOutlineBlankOutlinedIcon from "@mui/icons-material/CheckBoxOutlineBlankOutlined";
@@ -26,13 +26,15 @@ import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 
 export default function PageFive() {
-   const router = useRouter()
-   const pathname = usePathname()
+   const router = useRouter();
+   const pathname = usePathname();
    const searchParams = useSearchParams();
    const shiftId = searchParams.get("shiftId");
    const [hasStandBy, setHasStandBy] = useState(false);
    const [workerCounter, setWorkerCounter] = useState(0);
    const [workers, setWorkers] = useState([]);
+   const [compPplCounter, setCompPplCounter] = useState(0);
+   const [compPeople, setCompPeople] = useState([]);
    const [hazardControls, setHazardControls] = useState(null);
    const [dataReady, setDataReady] = useState(false);
 
@@ -40,9 +42,9 @@ export default function PageFive() {
       fetch("../api/get-page5-options/" + shiftId)
          .then((res) => {
             if (!res.ok) {
-               throw new Error("Network response was not ok")
+               throw new Error("Network response was not ok");
             }
-            return res.json()
+            return res.json();
          })
          .then((res) => {
             setHazardControls(res.hazardControlOpts);
@@ -56,36 +58,8 @@ export default function PageFive() {
          });
    }, [shiftId]);
 
-   function handleStandByAdd(evt) {
-      const hasStandBy = evt.target.value === "true";
-      setHasStandBy(hasStandBy);
-      if (hasStandBy) {
-         setWorkerCounter(1);
-         setWorkers([...workers, { id: 1, value: "" }]);
-      } else {
-         setWorkerCounter(0);
-         setWorkers([]);
-      }
-   }
-
-   // Assign worker name and job to each worker object inside workers variable
-   function addWorker() {
-      setWorkerCounter(workerCounter + 1);
-      setWorkers([...workers, { id: workerCounter + 1, value: "", job: "" }]);
-      console.log(workers)
-   }
-
-   function assignWorkerName(evt, id) {
-      const name = evt.target.value;
-      const workerFlds = workers.map((fld) => {
-         if (fld.id === id) {
-            fld.value = name;
-         }
-         return fld;
-      });
-      setWorkers(workerFlds);
-   }
-
+   /* Hazard Controls Methods */
+   // Handle individual option changes
    function handleHazardControlChange(idx, isChecked) {
       const val = isChecked === "true";
       setHazardControls((prev) => {
@@ -95,24 +69,87 @@ export default function PageFive() {
       });
    }
 
-   function removeWorker(id) {
-      const workerFlds = workers.filter((fld) => fld.id !== id);
-      setWorkers(workerFlds);
-      console.log(`Removed worker ${id}`)
+   /* Stand-by Persons Methods */
+   // Initialize worker fields
+   function handleStandByAdd(evt) {
+      const hasStandBy = evt.target.value === "true";
+      setHasStandBy(hasStandBy);
+      if (hasStandBy) {
+         setWorkerCounter(1);
+         setWorkers([{ id: 1, name: "", job: "" }]);
+      } else {
+         setWorkerCounter(0);
+         setWorkers([]);
+      }
    }
-
-   function handleJobChange(evt, id) {
-      const job = evt.target.value;
+   // Add worker to workers array
+   function addWorker() {
+      console.log(workers)
+      setWorkerCounter(workerCounter + 1);
+      setWorkers([...workers, { id: workerCounter + 1, name: "", job: "" }]);
+      console.log(workers)
+   }
+   // Assign worker name to worker object
+   function assignWorkerName(evt, id) {
+      const name = evt.target.value;
       const workerFlds = workers.map((fld) => {
          if (fld.id === id) {
-            fld.job = job;
+            return { ...fld, name };
          }
          return fld;
       });
       setWorkers(workerFlds);
-
+   }
+   // Assign worker job to worker object
+   function handleJobChange(evt, id) {
+      const job = evt.target.value;
+      const workerFlds = workers.map((fld) => {
+         if (fld.id === id) {
+            return { ...fld, job };
+         }
+         return fld;
+      });
+      setWorkers(workerFlds);
+   }
+   // Remove worker from workers array
+   function removeWorker(id) {
+      const workerFlds = workers.filter((fld) => fld.id !== id);
+      setWorkers([...workerFlds])
    }
 
+   /* Competent Person Methods */
+   // Add competent person field to competentPeople array
+   function addCompetentPerson() {
+      console.log(compPeople)
+      setCompPplCounter(compPplCounter + 1);
+      setCompPeople([...compPeople, { id: compPplCounter + 1, name: "" }]);
+   }
+   // Assign selected name to assc. competent person object
+   function assignCompetentPerson(evt, id) {
+      const name = evt.target.value;
+      const compPplFlds = compPeople.map((fld) => {
+         if (fld.id === id) {
+            fld.name = name;
+         }
+         return fld;
+      });
+      setCompPeople(compPplFlds);
+   }
+   // Remove competent person from compPeople array
+   function removeCompetentPerson(id) {
+      const compPplFlds = compPeople.filter((fld) => fld.id !== id);
+      setCompPeople([...compPplFlds]);
+   }
+
+   /* Navigation Methods */
+   // Handle pagination
+   function handlePageChange(val) {
+      let newPathname = pathname.replace(/pg-(\d+)/, `pg-${val}`);
+      newPathname = newPathname + `?shiftId=${shiftId}`;
+      handleNext();
+      router.push(newPathname);
+   }
+   // Update hazard controls and situationsMisc data
    function handleNext() {
       {
          fetch("../api/update-page5-options/" + shiftId, {
@@ -126,13 +163,6 @@ export default function PageFive() {
             }),
          });
       }
-   }
-
-   function handlePageChange(evt, val) {
-      let newPathname = pathname.replace(/pg-(\d+)/, `pg-${val}`);
-      newPathname = newPathname + `?shiftId=${shiftId}`
-      handleNext()
-      router.push(newPathname)
    }
 
    return (
@@ -352,17 +382,18 @@ export default function PageFive() {
                   </RadioGroup>
                </FormControl>
                {hasStandBy &&
-                  // Spotter/Flagger/Traffic Control field(s)
+                  // Stand-By Persons Fields (Worker Select, Job Select, Delete Button)
                   workers.map((obj, idx) => {
                      return (
                         <Box key={idx} display="flex" sx={{ gap: 2 }}>
                            {/* Worker Select */}
                            <TextField
                               key={idx}
-                              id={obj.id}
+                              id={idx}
                               label="Worker"
                               variant="standard"
-                                onBlur={(e) => assignWorkerName(e, obj.id)}
+                              value={obj.name}
+                              onChange={(e) => assignWorkerName(e, obj.id)}
                               sx={{
                                  flex: 1,
                                  marginLeft: 2,
@@ -411,15 +442,37 @@ export default function PageFive() {
                         </Box>
                      );
                   })}
+               {/* Adds additional worker objects to workers array */}
                {hasStandBy && <Button onClick={addWorker}>Add Worker</Button>}
-               <Autocomplete
-                  disablePortal
-                  id="competent-person"
-                  options={competentPeople}
-                  renderInput={(params) => (
-                     <TextField {...params} label="Competent Person" />
-                  )}
-               />
+               {dataReady &&
+                  compPeople.map((obj, idx) => {
+                      return (
+                        <Box key={idx} display="flex" sx={{ gap: 2 }}>
+                           <Autocomplete
+                             disablePortal
+                             id="competent-person"
+                             options={competentPeople}
+                             value={obj.name}
+                             autoSelect={true}
+                             onBlur={(e) => assignCompetentPerson(e, obj.id)}
+                             renderInput={(params) => (
+                               <TextField
+                                 {...params}
+                                 label="Competent Person"
+                               />
+                             )}
+                             sx={{ flex: 2 }}
+                           />
+                           <DeleteOutlineIcon
+                             style={{ cursor: "pointer" }}
+                             onClick={() => removeCompetentPerson(obj.id)}
+                           />
+                        </Box>
+                      );
+                  })}
+               <Button onClick={addCompetentPerson}>
+                  Add Competent Person
+               </Button>
             </Box>
          </Container>
          {/* Navigation Buttons */}
@@ -448,11 +501,19 @@ export default function PageFive() {
             </Button>
          </Box>
          <Box display="flex" justifyContent="center">
-            <Button variant="standard">                   
-               <Link href="/" onClick={handleNext}>Home</Link>
+            <Button variant="standard">
+               <Link href="/" onClick={handleNext}>
+                  Home
+               </Link>
             </Button>
          </Box>
-         <Pagination color="primary" page={5} count={8} onChange={handlePageChange}/>
+         {/* Pagination bottom-drawer (needs styling) */}
+         <Pagination
+            color="primary"
+            page={5}
+            count={8}
+            onChange={handlePageChange}
+         />
       </Container>
    );
 }
