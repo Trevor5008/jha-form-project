@@ -107,7 +107,7 @@ export default function PageOne() {
                {view === "task" ? (
                   <Link
                      href={{
-                        pathname: dataReady ? "../page-one" : null,
+                        pathname: dataReady ? "../pg-1" : null,
                         query: {
                            view: "shift",
                            taskId,
@@ -125,7 +125,7 @@ export default function PageOne() {
                ) : (
                   <Link
                      href={{
-                        pathname: dataReady ? "../page-two" : null,
+                        pathname: dataReady ? "../pg-2" : null,
                         query: {
                            shiftId,
                         },

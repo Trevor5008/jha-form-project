@@ -11,15 +11,18 @@ import {
    Radio,
    Box,
    Button,
+   Pagination,
    FormHelperText,
 } from "@mui/material";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import CheckIcon from "@mui/icons-material/Check";
 import CheckBoxOutlineBlankOutlinedIcon from "@mui/icons-material/CheckBoxOutlineBlankOutlined";
 import Header from "../components/Header";
 
 export default function PageTwo() {
+   const router = useRouter()
+   const pathname = usePathname()
    const searchParams = useSearchParams();
    const shiftId = searchParams.get("shiftId");
    const [permits, setPermits] = useState(null);
@@ -83,6 +86,13 @@ export default function PageTwo() {
             }),
          });
       }
+   }
+
+   function handlePageChange(evt, val) {
+      let newPathname = pathname.replace(/pg-(\d+)/, `pg-${val}`);
+      newPathname = newPathname + `?shiftId=${shiftId}`
+      handleNext()
+      router.push(newPathname)
    }
 
    return (
@@ -365,7 +375,7 @@ export default function PageTwo() {
             <Button variant="standard">
                <Link
                   href={{
-                     pathname: "../page-three",
+                     pathname: "../pg-3",
                      query: { shiftId },
                   }}
                   onClick={handleNext}
@@ -374,6 +384,7 @@ export default function PageTwo() {
                </Link>
             </Button>
          </Box>
+         <Pagination color="primary" page={2} count={8} onChange={handlePageChange}/>
       </Container>
    );
 }

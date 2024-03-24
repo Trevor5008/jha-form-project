@@ -9,6 +9,7 @@ import {
    FormLabel,
    TextField,
    Typography,
+   Pagination,
    Modal,
 } from "@mui/material";
 import SignatureCanvas from "react-signature-canvas";
@@ -20,6 +21,7 @@ export default function PageEight() {
    const searchParams = useSearchParams();
    const sigCanvas = useRef();
    const shiftId = searchParams.get("shiftId");
+   const [currPage, setCurrPage] = useState(8)
    const [openSignPad, setOpenSignPad] = useState(false);
    const [signImg, setSignImg] = useState(null);
    const [dataReady, setDataReady] = useState(false);
@@ -36,6 +38,9 @@ export default function PageEight() {
       p: 4,
    };
 
+   function handlePageChange(evt, val) {
+      setCurrPage(val)
+   }
    function createSignature() {
       const url = sigCanvas.current.getTrimmedCanvas().toDataURL("image/png");
       setSignImg(url);
@@ -87,6 +92,12 @@ export default function PageEight() {
                <Button onClick={removeSignature}>Remove</Button>
             </Box>
          )}
+         <Pagination
+            count={8}
+            page={8}
+            color="primary"
+            onChange={handlePageChange}
+         />
       </Container>
    );
 }

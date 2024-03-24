@@ -12,11 +12,14 @@ import {
    TextField,
    Typography,
    InputAdornment,
+   Pagination,
 } from "@mui/material";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 
 export default function PageSeven() {
+   const router = useRouter();
+   const pathname = usePathname();
    const searchParams = useSearchParams();
    const shiftId = searchParams.get("shiftId");
    const [situations, setSituations] = useState(null);
@@ -107,6 +110,13 @@ export default function PageSeven() {
             ppe,
          }),
       });
+   }
+
+   function handlePageChange(evt, val) {
+      let newPathname = pathname.replace(/pg-(\d+)/, `pg-${val}`);
+      newPathname = newPathname + `?shiftId=${shiftId}`
+      handleNext()
+      router.push(newPathname)
    }
 
    return (
@@ -262,7 +272,7 @@ export default function PageSeven() {
             <Button variant="standard">
                <Link
                   href={{
-                     pathname: "../page-six",
+                     pathname: "../pg-6",
                      query: { shiftId },
                   }}
                   onClick={handleNext}
@@ -290,6 +300,12 @@ export default function PageSeven() {
                </Link>
             </Button>
          </Box>
+         <Pagination
+            color="primary"
+            page={7}
+            count={8}
+            onChange={handlePageChange}
+         />
       </Container>
    );
 }

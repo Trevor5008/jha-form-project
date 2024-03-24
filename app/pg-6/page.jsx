@@ -9,14 +9,17 @@ import {
    FormLabel,
    Radio,
    RadioGroup,
-   Typography
+   Typography,
+   Pagination
 } from "@mui/material"
 import CheckIcon from "@mui/icons-material/Check"
 import CheckBoxOutlineBlankOutlinedIcon from "@mui/icons-material/CheckBoxOutlineBlankOutlined"
-import { useSearchParams } from "next/navigation"
+import { useSearchParams, useRouter, usePathname } from "next/navigation"
 import Link from "next/link"
 
 export default function PageFive() {
+   const router = useRouter()
+   const pathname = usePathname()
    const searchParams = useSearchParams()
    const shiftId = searchParams.get("shiftId")
    const [ppe, setPpe] = useState(null)
@@ -63,7 +66,14 @@ export default function PageFive() {
           }
        )
     }
- }
+   }
+
+   function handlePageChange(evt, val) {
+     let newPathname = pathname.replace(/pg-(\d+)/, `pg-${val}`);
+     newPathname = newPathname + `?shiftId=${shiftId}`
+     handleNext()
+     router.push(newPathname)
+  }
    return (
       <Container>
          {/* PPE */}
@@ -234,7 +244,7 @@ export default function PageFive() {
             <Button variant="standard">
                <Link
                   href={{
-                     pathname: "../page-five",
+                     pathname: "../pg-5",
                      query: { shiftId }
                   }}
                   onClick={handleNext}
@@ -245,7 +255,7 @@ export default function PageFive() {
             <Button variant="standard">
                <Link
                   href={{
-                     pathname: "../page-seven",
+                     pathname: "../pg-7",
                      query: { shiftId }
                   }}
                   onClick={handleNext}
@@ -259,6 +269,7 @@ export default function PageFive() {
                <Link href="/" onClick={handleNext}>Home</Link>
             </Button>
          </Box>
+         <Pagination color="primary" page={6} count={8} onChange={handlePageChange}/>
       </Container>
    )
 }

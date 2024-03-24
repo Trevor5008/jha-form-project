@@ -16,15 +16,18 @@ import {
    Typography,
    MenuItem,
    Select,
+   Pagination
 } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import CheckBoxOutlineBlankOutlinedIcon from "@mui/icons-material/CheckBoxOutlineBlankOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { competentPeople } from "@/lib/options";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 
 export default function PageFive() {
+   const router = useRouter()
+   const pathname = usePathname()
    const searchParams = useSearchParams();
    const shiftId = searchParams.get("shiftId");
    const [hasStandBy, setHasStandBy] = useState(false);
@@ -65,9 +68,22 @@ export default function PageFive() {
       }
    }
 
+   // Assign worker name and job to each worker object inside workers variable
    function addWorker() {
       setWorkerCounter(workerCounter + 1);
-      setWorkers([...workers, { id: workerCounter + 1, value: "" }]);
+      setWorkers([...workers, { id: workerCounter + 1, value: "", job: "" }]);
+      console.log(workers)
+   }
+
+   function assignWorkerName(evt, id) {
+      const name = evt.target.value;
+      const workerFlds = workers.map((fld) => {
+         if (fld.id === id) {
+            fld.value = name;
+         }
+         return fld;
+      });
+      setWorkers(workerFlds);
    }
 
    function handleHazardControlChange(idx, isChecked) {
@@ -82,10 +98,19 @@ export default function PageFive() {
    function removeWorker(id) {
       const workerFlds = workers.filter((fld) => fld.id !== id);
       setWorkers(workerFlds);
+      console.log(`Removed worker ${id}`)
    }
 
-   function handleJobChange(evt) {
-      console.log(evt.target.value);
+   function handleJobChange(evt, id) {
+      const job = evt.target.value;
+      const workerFlds = workers.map((fld) => {
+         if (fld.id === id) {
+            fld.job = job;
+         }
+         return fld;
+      });
+      setWorkers(workerFlds);
+
    }
 
    function handleNext() {
@@ -101,6 +126,13 @@ export default function PageFive() {
             }),
          });
       }
+   }
+
+   function handlePageChange(evt, val) {
+      let newPathname = pathname.replace(/pg-(\d+)/, `pg-${val}`);
+      newPathname = newPathname + `?shiftId=${shiftId}`
+      handleNext()
+      router.push(newPathname)
    }
 
    return (
@@ -330,16 +362,7 @@ export default function PageFive() {
                               id={obj.id}
                               label="Worker"
                               variant="standard"
-                              InputProps={{
-                                 endAdornment: (
-                                    <InputAdornment position="end">
-                                       {/* <DeleteOutlineIcon
-                                          style={{ cursor: "pointer" }}
-                                          onClick={() => removeWorker(obj.id)}
-                                       /> */}
-                                    </InputAdornment>
-                                 ),
-                              }}
+                                onBlur={(e) => assignWorkerName(e, obj.id)}
                               sx={{
                                  flex: 1,
                                  marginLeft: 2,
@@ -368,8 +391,8 @@ export default function PageFive() {
                                  variant="standard"
                                  labelId="demo-simple-select-autowidth-label"
                                  id="demo-simple-select-autowidth"
-                                 value={""}
-                                 onChange={handleJobChange}
+                                 value={obj.job || ""}
+                                 onChange={(e) => handleJobChange(e, obj.id)}
                                  autoWidth
                                  label="Job"
                               >
@@ -380,7 +403,7 @@ export default function PageFive() {
                                  </MenuItem>
                               </Select>
                            </FormControl>
-                           {/* Delete button */}
+                           {/* Delete button - remove assc. worker from workers array variable*/}
                            <DeleteOutlineIcon
                               style={{ cursor: "pointer" }}
                               onClick={() => removeWorker(obj.id)}
@@ -404,7 +427,7 @@ export default function PageFive() {
             <Button variant="standard">
                <Link
                   href={{
-                     pathname: "../page-four",
+                     pathname: "../pg-4",
                      query: { shiftId },
                   }}
                   onClick={handleNext}
@@ -415,7 +438,7 @@ export default function PageFive() {
             <Button variant="standard">
                <Link
                   href={{
-                     pathname: "../page-six",
+                     pathname: "../pg-6",
                      query: { shiftId },
                   }}
                   onClick={handleNext}
@@ -425,10 +448,11 @@ export default function PageFive() {
             </Button>
          </Box>
          <Box display="flex" justifyContent="center">
-            <Button variant="standard">
+            <Button variant="standard">                   
                <Link href="/" onClick={handleNext}>Home</Link>
             </Button>
          </Box>
+         <Pagination color="primary" page={5} count={8} onChange={handlePageChange}/>
       </Container>
    );
 }

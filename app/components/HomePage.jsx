@@ -70,7 +70,7 @@ export default function HomePage() {
                                             cursor: "pointer",
                                          }}
                                          href={{
-                                            pathname: "../page-two",
+                                            pathname: "../pg-2",
                                             query: {
                                                shiftId: shift.id,
                                             },
@@ -90,7 +90,7 @@ export default function HomePage() {
                               {/* NextJs link -> Task View*/}
                               <Link
                                  href={{
-                                    pathname: "../page-one",
+                                    pathname: "../pg-1",
                                     query: {
                                        view: "shift",
                                        taskId: task.id,
@@ -140,7 +140,7 @@ export default function HomePage() {
                   {/* NextJs link -> Task View*/}
                   <Link
                      href={{
-                        pathname: "../page-one",
+                        pathname: "../pg-1",
                         query: {
                            view: "task",
                            projectId: project?.id,
