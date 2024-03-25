@@ -13,15 +13,17 @@ import {
    Modal,
 } from "@mui/material";
 import SignatureCanvas from "react-signature-canvas";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 
 export default function PageEight() {
+   const router = useRouter();
+   const pathname = usePathname();
    const searchParams = useSearchParams();
    const sigCanvas = useRef();
    const shiftId = searchParams.get("shiftId");
-   const [currPage, setCurrPage] = useState(8)
+   const [currPage, setCurrPage] = useState(8);
    const [openSignPad, setOpenSignPad] = useState(false);
    const [signImg, setSignImg] = useState(null);
    const [dataReady, setDataReady] = useState(false);
@@ -38,9 +40,16 @@ export default function PageEight() {
       p: 4,
    };
 
+   /* Navigation Methods */
+   
+   // Handle pagination (don't remove 'evt' parameter, it's required by MUI Pagination component)
    function handlePageChange(evt, val) {
-      setCurrPage(val)
+      let newPathname = pathname.replace(/pg-(\d+)/, `pg-${val}`);
+      newPathname = newPathname + `?shiftId=${shiftId}`;
+      // handleNext();
+      router.push(newPathname);
    }
+
    function createSignature() {
       const url = sigCanvas.current.getTrimmedCanvas().toDataURL("image/png");
       setSignImg(url);
@@ -97,6 +106,13 @@ export default function PageEight() {
             page={8}
             color="primary"
             onChange={handlePageChange}
+            sx={{
+               ".MuiPagination-ul": {
+                  justifyContent: "space-between", // Spread items across the full width
+               },
+               width: "100%", // Make the pagination component take the full width
+               marginY: 4, // Top and bottom margin
+            }}
          />
       </Container>
    );

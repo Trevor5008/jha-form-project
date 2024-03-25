@@ -97,6 +97,15 @@ export default function PageSeven() {
       }
    }
 
+   /* Navigation Methods */
+
+   // Handle pagination (don't remove 'evt' parameter, it's required by MUI Pagination component)
+   function handlePageChange(evt, val) {
+      let newPathname = pathname.replace(/pg-(\d+)/, `pg-${val}`);
+      newPathname = newPathname + `?shiftId=${shiftId}`;
+      handleNext();
+      router.push(newPathname);
+   }
    function handleNext() {
       fetch("../api/update-page7-options/" + shiftId, {
          method: "PATCH",
@@ -110,13 +119,6 @@ export default function PageSeven() {
             ppe,
          }),
       });
-   }
-
-   function handlePageChange(evt, val) {
-      let newPathname = pathname.replace(/pg-(\d+)/, `pg-${val}`);
-      newPathname = newPathname + `?shiftId=${shiftId}`
-      handleNext()
-      router.push(newPathname)
    }
 
    return (
@@ -305,6 +307,13 @@ export default function PageSeven() {
             page={7}
             count={8}
             onChange={handlePageChange}
+            sx={{
+               ".MuiPagination-ul": {
+                  justifyContent: "space-between", // Spread items across the full width
+               },
+               width: "100%", // Make the pagination component take the full width
+               marginY: 4, // Top and bottom margin
+            }}
          />
       </Container>
    );

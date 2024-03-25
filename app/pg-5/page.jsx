@@ -84,10 +84,10 @@ export default function PageFive() {
    }
    // Add worker to workers array
    function addWorker() {
-      console.log(workers)
+      console.log(workers);
       setWorkerCounter(workerCounter + 1);
       setWorkers([...workers, { id: workerCounter + 1, name: "", job: "" }]);
-      console.log(workers)
+      console.log(workers);
    }
    // Assign worker name to worker object
    function assignWorkerName(evt, id) {
@@ -114,13 +114,13 @@ export default function PageFive() {
    // Remove worker from workers array
    function removeWorker(id) {
       const workerFlds = workers.filter((fld) => fld.id !== id);
-      setWorkers([...workerFlds])
+      setWorkers([...workerFlds]);
    }
 
    /* Competent Person Methods */
    // Add competent person field to competentPeople array
    function addCompetentPerson() {
-      console.log(compPeople)
+      console.log(compPeople);
       setCompPplCounter(compPplCounter + 1);
       setCompPeople([...compPeople, { id: compPplCounter + 1, name: "" }]);
    }
@@ -142,8 +142,9 @@ export default function PageFive() {
    }
 
    /* Navigation Methods */
-   // Handle pagination
-   function handlePageChange(val) {
+   
+   // Handle pagination (don't remove 'evt' parameter, it's required by MUI Pagination component)
+   function handlePageChange(evt, val) {
       let newPathname = pathname.replace(/pg-(\d+)/, `pg-${val}`);
       newPathname = newPathname + `?shiftId=${shiftId}`;
       handleNext();
@@ -446,29 +447,29 @@ export default function PageFive() {
                {hasStandBy && <Button onClick={addWorker}>Add Worker</Button>}
                {dataReady &&
                   compPeople.map((obj, idx) => {
-                      return (
+                     return (
                         <Box key={idx} display="flex" sx={{ gap: 2 }}>
                            <Autocomplete
-                             disablePortal
-                             id="competent-person"
-                             options={competentPeople}
-                             value={obj.name}
-                             autoSelect={true}
-                             onBlur={(e) => assignCompetentPerson(e, obj.id)}
-                             renderInput={(params) => (
-                               <TextField
-                                 {...params}
-                                 label="Competent Person"
-                               />
-                             )}
-                             sx={{ flex: 2 }}
+                              disablePortal
+                              id="competent-person"
+                              options={competentPeople}
+                              value={obj.name}
+                              autoSelect={true}
+                              onBlur={(e) => assignCompetentPerson(e, obj.id)}
+                              renderInput={(params) => (
+                                 <TextField
+                                    {...params}
+                                    label="Competent Person"
+                                 />
+                              )}
+                              sx={{ flex: 2 }}
                            />
                            <DeleteOutlineIcon
-                             style={{ cursor: "pointer" }}
-                             onClick={() => removeCompetentPerson(obj.id)}
+                              style={{ cursor: "pointer" }}
+                              onClick={() => removeCompetentPerson(obj.id)}
                            />
                         </Box>
-                      );
+                     );
                   })}
                <Button onClick={addCompetentPerson}>
                   Add Competent Person
@@ -507,12 +508,18 @@ export default function PageFive() {
                </Link>
             </Button>
          </Box>
-         {/* Pagination bottom-drawer (needs styling) */}
          <Pagination
             color="primary"
             page={5}
             count={8}
             onChange={handlePageChange}
+            sx={{
+               '.MuiPagination-ul': {
+                   justifyContent: 'space-between', // Spread items across the full width
+               },
+               width: '100%', // Make the pagination component take the full width
+               marginY: 4, // Top and bottom margin
+           }}
          />
       </Container>
    );

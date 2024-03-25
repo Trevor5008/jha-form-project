@@ -10,7 +10,7 @@ import {
    Radio,
    RadioGroup,
    Typography,
-   Pagination
+   Pagination,
 } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import CheckBoxOutlineBlankOutlinedIcon from "@mui/icons-material/CheckBoxOutlineBlankOutlined";
@@ -18,8 +18,8 @@ import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 
 export default function PageThree() {
-   const router = useRouter()
-   const pathname = usePathname()
+   const router = useRouter();
+   const pathname = usePathname();
    const searchParams = useSearchParams();
    const shiftId = searchParams.get("shiftId");
    const [situations, setSituations] = useState(null);
@@ -65,9 +65,10 @@ export default function PageThree() {
 
    function handlePageChange(evt, val) {
       let newPathname = pathname.replace(/pg-(\d+)/, `pg-${val}`);
-      newPathname = newPathname + `?shiftId=${shiftId}`
-      handleNext()
-      router.push(newPathname)
+      newPathname = newPathname + `?shiftId=${shiftId}`;
+      console.log(val, newPathname);
+      handleNext();
+      router.push(newPathname);
    }
 
    return (
@@ -238,10 +239,24 @@ export default function PageThree() {
          </Box>
          <Box display="flex" justifyContent="center">
             <Button variant="standard">
-               <Link href="/" onClick={handleNext}>Home</Link>
+               <Link href="/" onClick={handleNext}>
+                  Home
+               </Link>
             </Button>
          </Box>
-         <Pagination color="primary" page={3} count={8} onChange={handlePageChange}/>
+         <Pagination
+            color="primary"
+            page={3}
+            count={8}
+            onChange={handlePageChange}
+            sx={{
+               ".MuiPagination-ul": {
+                  justifyContent: "space-between", // Spread items across the full width
+               },
+               width: "100%", // Make the pagination component take the full width
+               marginY: 4, // Top and bottom margin
+            }}
+         />
       </Container>
    );
 }
