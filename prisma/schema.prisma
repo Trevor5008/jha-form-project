@@ -33,11 +33,11 @@ model Shift {
   foreman           String
   startDateTime     DateTime      
   endDateTime       DateTime?       
-  permits           Permit[]
   task           Task       @relation(fields: [taskId], references: [id])
   taskId         Int
   shiftCategoryOptions   ShiftCategoryOption[]
   miscOptions      MiscOption[]
+  shiftPersonnel   ShiftPersonnel[]
 }
 
 model Category {
@@ -79,9 +79,28 @@ model MiscOption {
   @@id([shiftId, categoryId])
 }
 
-model Permit {
-  id                Int           @id @default(autoincrement())
-  name              String
-  shift             Shift         @relation(fields: [shiftId], references: [id])
-  shiftId           Int
+model Personnel {
+   id                Int           @id @default(autoincrement())
+   name              String
+   email             String
+   phone             String
+   ShiftPersonel     ShiftPersonnel[]
+}
+
+model ShiftPersonnel {
+   id                Int           @id @default(autoincrement())
+   assignment        String
+   shiftId           Int
+   personnelId       Int
+   shift             Shift     @relation(fields: [shiftId], references: [id])
+   personnel         Personnel  @relation(fields: [personnelId], references: [id])
+   ShiftCrew         ShiftCrew[]
+}
+
+model ShiftCrew {
+   shiftPersonnelId       Int
+   signatureReceived      Boolean
+   shiftPersonnel         ShiftPersonnel  @relation(fields: [shiftPersonnelId], references: [id])
+
+   @@id([shiftPersonnelId])
 }

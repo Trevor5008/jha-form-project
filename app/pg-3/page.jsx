@@ -216,7 +216,7 @@ export default function PageThree() {
             <Button variant="standard">
                <Link
                   href={{
-                     pathname: "../pg-3",
+                     pathname: "../pg-2",
                      query: { shiftId },
                   }}
                   onClick={handleNext}
