@@ -84,7 +84,7 @@ model Personnel {
    name              String
    email             String
    phone             String
-   ShiftPersonel     ShiftPersonnel[]
+   shiftPersonnel     ShiftPersonnel[]
 }
 
 model ShiftPersonnel {
