@@ -21,7 +21,6 @@ import {
 import CheckIcon from "@mui/icons-material/Check";
 import CheckBoxOutlineBlankOutlinedIcon from "@mui/icons-material/CheckBoxOutlineBlankOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import { competentPeople } from "@/lib/options";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 
@@ -30,12 +29,16 @@ export default function PageFive() {
    const pathname = usePathname();
    const searchParams = useSearchParams();
    const shiftId = searchParams.get("shiftId");
-   const [hasStandBy, setHasStandBy] = useState(false);
-   const [workerCounter, setWorkerCounter] = useState(0);
-   const [workers, setWorkers] = useState([]);
-   const [compPplCounter, setCompPplCounter] = useState(0);
+   // Personnel options for worker and competent person fields
+   const [personnelOpts, setPersonnelOpts] = useState([]);
+   // Competent Persons Assignments
    const [compPeople, setCompPeople] = useState([]);
+   // Shift Category Option (Hazard Controls)
    const [hazardControls, setHazardControls] = useState(null);
+   const [shiftPersonnel, setShiftPersonnel] = useState([]);
+   // Render Status Control Flag
+   // Toggle Worker Fields based on Stand-By Persons Option
+   const [hasStandBy, setHasStandBy] = useState(shiftPersonnel.length > 0);
    const [dataReady, setDataReady] = useState(false);
 
    useEffect(() => {
@@ -48,9 +51,9 @@ export default function PageFive() {
          })
          .then((res) => {
             setHazardControls(res.hazardControlOpts);
-            //   setSituationsMisc(
-            //      res.situationsMisc?.details
-            //   )
+            setPersonnelOpts(res.personnel);
+            const initialPersonnel = res.shiftPersonnel ? res.shiftPersonnel : []
+            setShiftPersonnel(initialPersonnel);
          })
          .then(() => setDataReady(true))
          .catch((error) => {
@@ -70,51 +73,47 @@ export default function PageFive() {
    }
 
    /* Stand-by Persons Methods */
-   // Initialize worker fields
+   // Initialize dynamic worker fields
    function handleStandByAdd(evt) {
       const hasStandBy = evt.target.value === "true";
       setHasStandBy(hasStandBy);
-      if (hasStandBy) {
-         setWorkerCounter(1);
-         setWorkers([{ id: 1, name: "", job: "" }]);
+      if (hasStandBy && shiftPersonnel.length === 0) {
+            addWorker()
       } else {
-         setWorkerCounter(0);
-         setWorkers([]);
+         setShiftPersonnel([]);
       }
    }
-   // Add worker to workers array
+   // Adds placeholder worker object to workers array
    function addWorker() {
-      console.log(workers);
-      setWorkerCounter(workerCounter + 1);
-      setWorkers([...workers, { id: workerCounter + 1, name: "", job: "" }]);
-      console.log(workers);
+      const placeHolderId = Date.now()
+      const newWorker = { id: placeHolderId, name: "", assignment: "" };
+      setShiftPersonnel([...shiftPersonnel, newWorker]);
    }
    // Assign worker name to worker object
-   function assignWorkerName(evt, id) {
-      const name = evt.target.value;
-      const workerFlds = workers.map((fld) => {
-         if (fld.id === id) {
-            return { ...fld, name };
+   function assignWorkerName(evt, name, id) {
+      const person = personnelOpts.find((worker) => worker.name === name);
+      const updatedWorkers = shiftPersonnel.map((worker) => {
+         if (worker && worker.id === id) {
+            return { ...worker, name, id: person.id };
          }
-         return fld;
+         return worker;
       });
-      setWorkers(workerFlds);
+      setShiftPersonnel(updatedWorkers);
    }
    // Assign worker job to worker object
    function handleJobChange(evt, id) {
       const job = evt.target.value;
-      const workerFlds = workers.map((fld) => {
-         if (fld.id === id) {
-            return { ...fld, job };
+      const updatedWorkers = shiftPersonnel.map((worker) => {
+         if (worker && worker.id === id) {
+            return { ...worker, assignment: job };
          }
-         return fld;
+         return worker;
       });
-      setWorkers(workerFlds);
+      setShiftPersonnel(updatedWorkers);
    }
    // Remove worker from workers array
    function removeWorker(id) {
-      const workerFlds = workers.filter((fld) => fld.id !== id);
-      setWorkers([...workerFlds]);
+      console.log(shiftPersonnel)
    }
 
    /* Competent Person Methods */
@@ -142,7 +141,7 @@ export default function PageFive() {
    }
 
    /* Navigation Methods */
-   
+
    // Handle pagination (don't remove 'evt' parameter, it's required by MUI Pagination component)
    function handlePageChange(evt, val) {
       let newPathname = pathname.replace(/pg-(\d+)/, `pg-${val}`);
@@ -160,7 +159,7 @@ export default function PageFive() {
             },
             body: JSON.stringify({
                hazardControls,
-               // situationsMisc
+               shiftPersonnel
             }),
          });
       }
@@ -383,37 +382,30 @@ export default function PageFive() {
                   </RadioGroup>
                </FormControl>
                {hasStandBy &&
-                  // Stand-By Persons Fields (Worker Select, Job Select, Delete Button)
-                  workers.map((obj, idx) => {
+                  // Stand-By Persons Fields (Worker Select, Job Select)
+                  shiftPersonnel.map((obj, idx) => {
                      return (
                         <Box key={idx} display="flex" sx={{ gap: 2 }}>
                            {/* Worker Select */}
-                           <TextField
-                              key={idx}
-                              id={idx}
-                              label="Worker"
+                           <Autocomplete
+                              disablePortal
                               variant="standard"
-                              value={obj.name}
-                              onChange={(e) => assignWorkerName(e, obj.id)}
-                              sx={{
-                                 flex: 1,
-                                 marginLeft: 2,
-                                 fontSize: {
-                                    xs: 14,
-                                    sm: 16,
-                                 },
-                                 "& .MuiFormLabel-root": {
-                                    color: "black",
-                                    fontSize: {
-                                       xs: 14,
-                                       sm: 16,
-                                    },
-                                 },
-                                 paddingRight: 1,
-                                 width: "100%",
-                                 marginBottom: 2,
-                              }}
-                              helperText="* provide details above"
+                              id={`worker-${idx}`}
+                              options={personnelOpts}
+                              getOptionLabel={(option) => option.name}
+                              onInputChange={(e, newVal) => assignWorkerName(e, newVal, obj.id)}
+                              renderInput={(params) => (
+                                 <TextField
+                                    {...params}
+                                    label="Worker"
+                                    variant="standard"
+                                    inputProps={{
+                                       ...params.inputProps,
+                                       autoComplete: "new-password",
+                                    }}
+                                 />
+                              )}
+                              sx={{ flex: 2 }}
                            />
                            <FormControl sx={{ flex: 1 }}>
                               <InputLabel id="demo-simple-select-autowidth-label">
@@ -421,9 +413,9 @@ export default function PageFive() {
                               </InputLabel>
                               <Select
                                  variant="standard"
+                                 value={obj?.assignment || ""}
                                  labelId="demo-simple-select-autowidth-label"
                                  id="demo-simple-select-autowidth"
-                                 value={obj.job || ""}
                                  onChange={(e) => handleJobChange(e, obj.id)}
                                  autoWidth
                                  label="Job"
@@ -451,15 +443,19 @@ export default function PageFive() {
                         <Box key={idx} display="flex" sx={{ gap: 2 }}>
                            <Autocomplete
                               disablePortal
-                              id="competent-person"
-                              options={competentPeople}
-                              value={obj.name}
-                              autoSelect={true}
+                              id={`competent-person-${idx}`}
+                              options={personnelOpts}
+                              getOptionLabel={(option) => option.name}
                               onBlur={(e) => assignCompetentPerson(e, obj.id)}
                               renderInput={(params) => (
                                  <TextField
                                     {...params}
+                                    variant="standard"
                                     label="Competent Person"
+                                    inputProps={{
+                                          ...params.inputProps,
+                                          autoComplete: "new-password",
+                                    }}
                                  />
                               )}
                               sx={{ flex: 2 }}

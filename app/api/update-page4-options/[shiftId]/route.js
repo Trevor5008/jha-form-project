@@ -16,33 +16,6 @@ export async function PATCH(request, { params }) {
          select: { id: true }
       })
 
-   //    const permitMisc =
-   //       await prisma.miscOption.findFirst({
-   //          where: {
-   //             shiftId,
-   //             categoryId: permitsId
-   //          }
-   //       })
-
-   //    if (!permitMisc && data.permitMisc) {
-   //       await prisma.miscOption.create({
-   //          data: {
-   //             shiftId,
-   //             categoryId: permitsId,
-   //             details: data.permitMisc
-   //          }
-   //       })
-   //    } else if (data.permitMisc) {
-   //       await prisma.miscOption.update({
-   //          where: {
-   //             shiftId_categoryId: {
-   //                shiftId,
-   //                categoryId: permitsId
-   //             }
-   //          },
-   //          data: { details: data.permitMisc }
-   //       })
-   //    }
    // Iterate over each option and update 'checked' value
    for (let hazard of data.hazards) {
       const { id: hazardId } =

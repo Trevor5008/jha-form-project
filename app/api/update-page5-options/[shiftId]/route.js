@@ -6,6 +6,7 @@ export async function PATCH(request, { params }) {
    const data = JSON.parse(rawBody)
    const shiftId = Number(params.shiftId)
 
+   console.log(data)
    // Hazards
    // get hazards category id
    const { id: hazardControlsId } =
@@ -16,34 +17,9 @@ export async function PATCH(request, { params }) {
          select: { id: true }
       })
 
-   //    const permitMisc =
-   //       await prisma.miscOption.findFirst({
-   //          where: {
-   //             shiftId,
-   //             categoryId: permitsId
-   //          }
-   //       })
 
-   //    if (!permitMisc && data.permitMisc) {
-   //       await prisma.miscOption.create({
-   //          data: {
-   //             shiftId,
-   //             categoryId: permitsId,
-   //             details: data.permitMisc
-   //          }
-   //       })
-   //    } else if (data.permitMisc) {
-   //       await prisma.miscOption.update({
-   //          where: {
-   //             shiftId_categoryId: {
-   //                shiftId,
-   //                categoryId: permitsId
-   //             }
-   //          },
-   //          data: { details: data.permitMisc }
-   //       })
-   //    }
    // Iterate over each option and update 'checked' value
+   // Handles each standard hazard control option
    for (let control of data.hazardControls) {
       const { id: hazardControlId } =
          await prisma.categoryOption.findFirst({
@@ -71,4 +47,7 @@ export async function PATCH(request, { params }) {
          }
       })
    }
+
+   // Shift Personnel Assignments
+   
 }

@@ -5,7 +5,7 @@ import { NextResponse } from "next/server"
 export async function GET(request, { params }) {
     const shiftId = Number(params['shiftId'])
 
-    // Hazards Category Id
+    // Hazard Controls Category Id
     const { id: hazardControlsId } = await prisma.category.findFirst({
         where: {
             name: "hazard controls"
@@ -13,7 +13,7 @@ export async function GET(request, { params }) {
         select: { id: true }
     })
 
-    // Hazards Category Options
+    // Hazard Controls Category Options
     const hazardControlOpts = await prisma.categoryOption.findMany({
         where: { categoryId: hazardControlsId },
         select: {
@@ -24,5 +24,31 @@ export async function GET(request, { params }) {
             }
         }
     })
-    return NextResponse.json({ hazardControlOpts })
+
+    // Gather all personnel for possible assignment
+    const personnel = await prisma.personnel.findMany({
+         select: {
+               name: true,
+               id: true,
+         }
+      })
+
+      // Find all shift personnel data and return it, shift personnel name's are found in the personnel table
+      const shiftPersonnel = await prisma.personnel.findMany({
+         select: { 
+            name: true,
+            shiftPersonnel: {
+               where: { shiftId: shiftId, 
+                  assignment: {
+                     in: ["spotter", "flagger", "traffic control"]
+                  }},
+               select: { 
+                  id: true,
+                  assignment: true,
+                } 
+            }
+         }
+      })
+
+    return NextResponse.json({ hazardControlOpts, personnel, shiftPersonnel })
 }
