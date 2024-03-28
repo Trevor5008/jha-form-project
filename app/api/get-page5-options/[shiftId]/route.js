@@ -34,19 +34,22 @@ export async function GET(request, { params }) {
       })
 
       // Find all shift personnel data and return it, shift personnel name's are found in the personnel table
-      const shiftPersonnel = await prisma.personnel.findMany({
-         select: { 
-            name: true,
-            shiftPersonnel: {
-               where: { shiftId: shiftId, 
-                  assignment: {
-                     in: ["spotter", "flagger", "traffic control"]
-                  }},
-               select: { 
-                  id: true,
-                  assignment: true,
-                } 
-            }
+      const shiftPersonnel = await prisma.shiftPersonnel.findMany({
+         where: {
+               shiftId,
+               personnelId: {
+                  in: personnel.map(p => p.id)
+               }
+         },
+         select: {
+               id: true,
+               assignment: true,
+               personnelId: true,
+               personnel: {
+                  select: {
+                     name: true
+                  }
+               }
          }
       })
 

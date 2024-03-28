@@ -6,7 +6,8 @@ export async function PATCH(request, { params }) {
    const data = JSON.parse(rawBody)
    const shiftId = Number(params.shiftId)
 
-   console.log(data)
+   const { hazardControls, shiftPersonnel } = data
+
    // Hazards
    // get hazards category id
    const { id: hazardControlsId } =
@@ -20,7 +21,7 @@ export async function PATCH(request, { params }) {
 
    // Iterate over each option and update 'checked' value
    // Handles each standard hazard control option
-   for (let control of data.hazardControls) {
+   for (let control of hazardControls) {
       const { id: hazardControlId } =
          await prisma.categoryOption.findFirst({
             where: {
@@ -49,5 +50,31 @@ export async function PATCH(request, { params }) {
    }
 
    // Shift Personnel Assignments
-   
+   for (let person of shiftPersonnel) {
+      try {
+         await prisma.shiftPersonnel.update({
+            where: {
+               id: person.shiftWorkerId
+            },
+            data: {
+               assignment: person.assignment
+            }
+         })
+      } catch (error) {
+         // P2025: Record not found
+         if (error.code === "P2025") {
+            await prisma.shiftPersonnel.create({
+               data: {
+                  assignment: person.assignment,
+                  personnelId: person.id,
+                  shiftId,
+                  id: person.shiftWorkerId
+               }
+            })
+         } else {
+            throw error
+         }
+      }
+   }
+
 }

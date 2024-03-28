@@ -88,7 +88,7 @@ model Personnel {
 }
 
 model ShiftPersonnel {
-   id                Int           @id @default(autoincrement())
+   id                String           @id
    assignment        String
    shiftId           Int
    personnelId       Int
@@ -98,7 +98,7 @@ model ShiftPersonnel {
 }
 
 model ShiftCrew {
-   shiftPersonnelId       Int
+   shiftPersonnelId       String
    signatureReceived      Boolean
    shiftPersonnel         ShiftPersonnel  @relation(fields: [shiftPersonnelId], references: [id])
 

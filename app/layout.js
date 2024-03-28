@@ -3,7 +3,6 @@ import { Inter } from "next/font/google"
 import { ThemeProvider } from "@emotion/react"
 import { theme } from "@/styles/themes"
 import CssBaseline from "@mui/material/CssBaseline"
-import { Provider } from "react-redux"
 
 const inter = Inter({ subsets: ["latin"] })
 
