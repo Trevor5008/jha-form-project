@@ -54,6 +54,7 @@ export default function PageFive() {
             setHazardControls(res.hazardControlOpts);
             setPersonnelOpts(res.personnel);
             if (res.shiftPersonnel.length > 0) {
+               setHasStandBy(true);
                setShiftPersonnel(
                   res.shiftPersonnel.map((person) => {
                      return {
@@ -89,7 +90,9 @@ export default function PageFive() {
    /* Stand-by Persons Methods */
    function handleStandByAdd() {
       setHasStandBy((prev) => !prev);
-      console.log(shiftPersonnel);
+      if (!hasStandBy) {
+         setShiftPersonnel([]);
+      }
    }
    // Adds a new (blank) input fields row
    function addWorkerFld() {
@@ -98,7 +101,7 @@ export default function PageFive() {
          return [...prev, { id: newId, name: "", assignment: "", shiftId }];
       });
    }
-
+   // Assigns personnel name to worker
    function assignWorkerName(e, workerId) {
       const person = personnelOpts.find((opt) => opt.name === e.target.value);
       setShiftPersonnel((prev) => {
@@ -112,7 +115,7 @@ export default function PageFive() {
          return updatedWorkers;
       });
    }
-
+   // Assigns role to worker
    function assignRole(e, workerId) {
       setShiftPersonnel((prev) => {
          const updatedWorkers = [...prev];
@@ -125,6 +128,12 @@ export default function PageFive() {
       });
    }
 
+   // Remove worker from shiftPersonnel
+   function removeWorker(workerId) {
+      setShiftPersonnel((prev) => {
+         return prev.filter((worker) => worker.id !== workerId);
+      });
+   }
    // Check data in state
    function checkData() {
       console.log(shiftPersonnel);
@@ -267,7 +276,7 @@ export default function PageFive() {
                        <Box
                           display="flex"
                           key={idx}
-                          sx={{ gap: 2, marginY: 0.5 }}
+                          sx={{ gap: 2, marginY: 0.75, alignItems: "center" }}
                        >
                           {/* Name Select */}
                           <FormControl fullWidth>
@@ -319,6 +328,10 @@ export default function PageFive() {
                                 </MenuItem>
                              </Select>
                           </FormControl>
+                          {/* Remove Icon */}
+                          <DeleteOutlineIcon
+                             onClick={() => removeWorker(person.id)}
+                          />
                        </Box>
                     ))
                   : null}
